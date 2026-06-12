@@ -52,6 +52,7 @@ def login_user(username, password):
         return True
     return False
 
+@st.cache_data
 def get_base64_image(image_path):
     """Read a local image and convert it to a base64 string for background CSS inclusion."""
     try:
