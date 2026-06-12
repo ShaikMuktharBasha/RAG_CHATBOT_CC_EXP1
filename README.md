@@ -31,7 +31,7 @@ A professional ChatGPT-style web application built with Streamlit and Python tha
 
 4.  **Run the application**:
     ```bash
-    streamlit run app.py
+    streamlit run streamlit_app.py
     ```
 
 ## Usage
