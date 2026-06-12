@@ -197,15 +197,15 @@ def render_auth_page():
                     <!-- Feature Lists -->
                     <div style="display: flex; flex-direction: column; gap: 10px;">
                         <div style="display: flex; align-items: center; gap: 12px;">
-                            <span style="background: rgba(255,255,255,0.15); width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0;">💡</span>
+                            <span style="background: rgba(255,255,255,0.15); width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i class="fa-solid fa-lightbulb" style="color: #ffffff; font-size: 0.8rem;"></i></span>
                             <span style="color: #ffffff; font-size: 0.85rem; font-weight: 600;">Instant AI-Powered Summaries</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 12px;">
-                            <span style="background: rgba(255,255,255,0.15); width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0;">💬</span>
+                            <span style="background: rgba(255,255,255,0.15); width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i class="fa-solid fa-comments" style="color: #ffffff; font-size: 0.8rem;"></i></span>
                             <span style="color: #ffffff; font-size: 0.85rem; font-weight: 600;">Interactive PDF & RAG Q&A</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 12px;">
-                            <span style="background: rgba(255,255,255,0.15); width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0;">🎓</span>
+                            <span style="background: rgba(255,255,255,0.15); width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i class="fa-solid fa-flask" style="color: #ffffff; font-size: 0.8rem;"></i></span>
                             <span style="color: #ffffff; font-size: 0.85rem; font-weight: 600;">22 Laboratory Experiments</span>
                         </div>
                     </div>

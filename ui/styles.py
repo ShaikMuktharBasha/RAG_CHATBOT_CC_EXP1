@@ -3,6 +3,7 @@ import streamlit as st
 def apply_custom_styles():
     """Injects high-end CSS into Streamlit for a premium ChatGPT-style UI."""
     st.html("""
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
     /* Premium Google Font imports - loaded as the first rule */
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
