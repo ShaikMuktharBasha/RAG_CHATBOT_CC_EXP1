@@ -1,7 +1,6 @@
 import streamlit as st
 import time
 from langchain_google_genai import ChatGoogleGenerativeAI
-from experiments_config import EXPERIMENTS
 
 # Dictionary of code snippets for each experiment
 CODE_TEMPLATES = {
@@ -354,35 +353,63 @@ print("Quantized Model Loaded successfully onto GPU!")
 def render_sandbox_playground(exp_id, active_api_key, selected_model):
     """Renders the general dashboard and interactive simulation playground for Experiments 3-22."""
     
-    exp = EXPERIMENTS.get(exp_id)
-    if not exp:
-        st.error(f"Experiment {exp_id} configuration not found.")
-        return
+    # Initialize session state for custom description and objectives
+    custom_desc_key = f"exp_desc_{exp_id}"
+    custom_objectives_key = f"exp_objectives_{exp_id}"
+    
+    if custom_desc_key not in st.session_state:
+        st.session_state[custom_desc_key] = ""
+    if custom_objectives_key not in st.session_state:
+        st.session_state[custom_objectives_key] = ""
         
     # 1. Render Header Card
     st.markdown(f"""
     <div class="exp-header-card">
         <div class="exp-meta-container">
-            <span class="exp-badge category">{exp['category']}</span>
-            <span class="exp-badge status-template">📝 Academic Sandbox</span>
+            <span class="exp-badge status-template">🧪 Experiment Workspace</span>
         </div>
-        <div class="exp-title">{exp['icon']} Exp {exp_id}: {exp['title']}</div>
-        <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; margin: 0;">{exp['description']}</p>
+        <div class="exp-title">Experiment {exp_id}</div>
     </div>
     """, unsafe_allow_html=True)
     
-    # 2. Render Learning Objectives Grid
-    st.markdown("### 🎓 Learning Objectives")
-    st.markdown('<div class="learning-objectives-grid">', unsafe_allow_html=True)
-    for idx, obj in enumerate(exp.get("learning_objectives", [])):
-        st.markdown(f"""
-        <div class="objective-card">
-            <div class="objective-number">{idx + 1}</div>
-            <div class="objective-text">{obj}</div>
-        </div>
-        """, unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
-    st.markdown("<br>", unsafe_allow_html=True)
+    # 2. Render Custom Documentation Editor
+    st.markdown("### 📝 Custom Experiment Documentation")
+    st.markdown("<p style='color: #9ca3af; font-size: 0.85rem; margin-top: -10px; margin-bottom: 15px;'>Enter your custom description and learning objectives below. They will be used to simulate results.</p>", unsafe_allow_html=True)
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        custom_desc = st.text_area(
+            "Add Custom Description",
+            value=st.session_state[custom_desc_key],
+            placeholder="Explain what this experiment does in your own words...",
+            height=120,
+            key=custom_desc_key
+        )
+    with col2:
+        custom_objectives_input = st.text_area(
+            "Add Learning Objectives (One per line)",
+            value=st.session_state[custom_objectives_key],
+            placeholder="e.g.\nUnderstand key NLP concepts\nEvaluate performance metrics...",
+            height=120,
+            key=custom_objectives_key
+        )
+        
+    # Parse objectives list
+    objectives_list = [line.strip() for line in custom_objectives_input.split("\n") if line.strip()]
+    
+    # Render objectives grid if any exist
+    if objectives_list:
+        st.markdown("#### 🎓 Current Learning Objectives")
+        st.markdown('<div class="learning-objectives-grid">', unsafe_allow_html=True)
+        for idx, obj in enumerate(objectives_list):
+            st.markdown(f"""
+            <div class="objective-card">
+                <div class="objective-number">{idx + 1}</div>
+                <div class="objective-text">{obj}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown("<br>", unsafe_allow_html=True)
     
     # 3. Interactive Sandbox Interface
     st.markdown("### ⚙️ Interactive Laboratory Playground")
@@ -392,7 +419,7 @@ def render_sandbox_playground(exp_id, active_api_key, selected_model):
         # Setup form input for sandbox
         user_input = st.text_area(
             "Configure Input Parameters / Text Input:",
-            value=exp.get("default_prompt", ""),
+            value="Enter sample text or parameters here...",
             height=120,
             key=f"sandbox_input_{exp_id}"
         )
@@ -423,10 +450,13 @@ def render_sandbox_playground(exp_id, active_api_key, selected_model):
                                 google_api_key=active_api_key
                             )
                             
+                            desc_context = custom_desc if custom_desc.strip() else "A custom user-defined laboratory experiment."
+                            objectives_context = ", ".join(objectives_list) if objectives_list else "None provided."
+                            
                             system_prompt = (
-                                f"You are simulating the execution of a college laboratory experiment: '{exp['title']}'.\n"
-                                f"Category: {exp['category']}\n"
-                                f"Description: {exp['description']}\n\n"
+                                f"You are simulating the execution of a college laboratory experiment: 'Experiment {exp_id}'.\n"
+                                f"Description: {desc_context}\n"
+                                f"Learning Objectives: {objectives_context}\n\n"
                                 "The student user has run this experiment sandbox with the following input parameters/text:\n"
                                 f"\"\"\"\n{user_input}\n\"\"\"\n\n"
                                 "Your goal is to output a realistic experiment report in the following structured format:\n"
