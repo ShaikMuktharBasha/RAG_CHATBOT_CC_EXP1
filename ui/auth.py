@@ -89,42 +89,47 @@ def render_auth_page():
             margin-top: 8px;
         }
         
-        /* Style the native Streamlit Form container box to look like a premium white card */
+        /* Style the native Streamlit Form container box to be dark glassmorphism */
         div[data-testid="stForm"] {
-            background-color: #ffffff !important;
+            background-color: rgba(17, 24, 39, 0.45) !important;
             border-radius: 16px !important;
             padding: 30px !important;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25) !important;
-            border: 1px solid rgba(0, 0, 0, 0.05) !important;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
             min-height: 460px;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
         }
         
-        /* Force light theme colors inside the white form card */
-        div[data-testid="stForm"] p,
+        /* Keep dark theme colors inside the form card */
         div[data-testid="stForm"] h2,
         div[data-testid="stForm"] label,
         div[data-testid="stForm"] span {
-            color: #1f2937 !important;
+            color: #f3f4f6 !important;
+        }
+        div[data-testid="stForm"] p {
+            color: #9ca3af !important;
         }
         
-        /* Redesign Streamlit input elements inside the form container to be clean light inputs */
+        /* Redesign Streamlit input elements inside the form container to be sleek dark inputs */
         div[data-testid="stForm"] div[data-baseweb="input"] {
-            background-color: #ffffff !important;
-            color: #1f2937 !important;
-            border: 1px solid #d1d5db !important;
+            background-color: rgba(11, 15, 26, 0.8) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
             border-radius: 8px !important;
         }
         div[data-testid="stForm"] input {
-            color: #1f2937 !important;
+            color: #ffffff !important;
             background-color: transparent !important;
         }
         div[data-testid="stForm"] div[data-baseweb="input"]:focus-within {
             border-color: #ea580c !important;
-            box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.1) !important;
+            box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.15) !important;
         }
         
-        /* Redesign Streamlit buttons inside the white form container to be solid Orange */
-        div[data-testid="stForm"] button {
+        /* Target ONLY the Form Submit Button, excluding the password eye icon button */
+        div[data-testid="stForm"] button[data-testid="baseButton-secondary"],
+        div[data-testid="stForm"] button[data-testid="stFormSubmitButton"] {
             background: linear-gradient(135deg, #e05615 0%, #f97316 100%) !important;
             color: #ffffff !important;
             border: none !important;
@@ -136,12 +141,14 @@ def render_auth_page():
             transition: all 0.2s ease !important;
             width: 100% !important;
         }
-        div[data-testid="stForm"] button:hover {
+        div[data-testid="stForm"] button[data-testid="baseButton-secondary"]:hover,
+        div[data-testid="stForm"] button[data-testid="stFormSubmitButton"]:hover {
             background: linear-gradient(135deg, #ea580c 0%, #fb923c 100%) !important;
             box-shadow: 0 6px 20px rgba(224, 86, 21, 0.45) !important;
             transform: translateY(-2px) !important;
         }
-        div[data-testid="stForm"] button * {
+        div[data-testid="stForm"] button[data-testid="baseButton-secondary"] *,
+        div[data-testid="stForm"] button[data-testid="stFormSubmitButton"] * {
             color: #ffffff !important;
             font-weight: 700 !important;
         }
