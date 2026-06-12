@@ -9,3 +9,5 @@ sentence-transformers
 torch
 python-dotenv
 streamlit
+groq
+langchain-groq

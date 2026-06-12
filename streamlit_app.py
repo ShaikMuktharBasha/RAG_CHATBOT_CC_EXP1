@@ -6,6 +6,8 @@ from ui.styles import apply_custom_styles
 from ui.sidebar import render_sidebar
 from ui.landing_page import render_landing_page
 from ui.chat_interface import render_chat_interface
+from ui.multilingual_rag import render_multilingual_rag_page
+from ui.sandbox_playground import render_sandbox_playground
 from ui import render_auth_page
 
 # Set Streamlit Page Configuration
@@ -49,13 +51,16 @@ if "current_api_key" not in st.session_state:
 if "current_model" not in st.session_state:
     st.session_state.current_model = ""
 
+if "selected_experiment" not in st.session_state:
+    st.session_state.selected_experiment = 1
+
 # ----------------- MAIN UI ROUTING & FLOW -----------------
 
 if not st.session_state.authenticated:
     render_auth_page()
 else:
     # ----------------- SIDEBAR CONTROLS -----------------
-    active_api_key, selected_model, uploaded_file = render_sidebar()
+    active_api_key, selected_model, uploaded_file, active_groq_key = render_sidebar()
 
     # ----------------- MAIN PROCESSING LOGIC -----------------
     def process_uploaded_pdf(file_to_process):
@@ -97,15 +102,21 @@ else:
             except Exception as e:
                 st.error(f"❌ Failed to process document: {str(e)}")
 
-    # Check if sidebar file uploaded but not processed yet
-    if uploaded_file is not None and (not st.session_state.processed or uploaded_file.name != st.session_state.doc_info["name"]):
-        process_uploaded_pdf(uploaded_file)
+    # Check if sidebar file uploaded but not processed yet (only for Exp 1 and 2)
+    if st.session_state.selected_experiment in [1, 2]:
+        if uploaded_file is not None and (not st.session_state.processed or uploaded_file.name != st.session_state.doc_info["name"]):
+            process_uploaded_pdf(uploaded_file)
 
     # ----------------- MAIN UI ROUTING -----------------
-    if not st.session_state.processed:
-        render_landing_page(process_uploaded_pdf)
+    if st.session_state.selected_experiment == 1:
+        if not st.session_state.processed:
+            render_landing_page(process_uploaded_pdf)
+        else:
+            render_chat_interface(active_api_key, selected_model)
+    elif st.session_state.selected_experiment == 2:
+        render_multilingual_rag_page(active_api_key, selected_model, active_groq_key)
     else:
-        render_chat_interface(active_api_key, selected_model)
+        render_sandbox_playground(st.session_state.selected_experiment, active_api_key, selected_model)
 
 
 

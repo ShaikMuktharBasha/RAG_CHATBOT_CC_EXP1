@@ -457,5 +457,160 @@ def apply_custom_styles():
             box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
         }
     }
+    
+    /* 7. Sidebar Experiment Navigation Custom styling */
+    [data-testid="stSidebar"] div.stButton > button {
+        background: rgba(255, 255, 255, 0.02) !important;
+        border: 1px solid rgba(255, 255, 255, 0.04) !important;
+        color: #9ca3af !important;
+        text-align: left !important;
+        padding: 8px 14px !important;
+        font-size: 0.825rem !important;
+        font-weight: 500 !important;
+        border-radius: 8px !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        margin-bottom: 2px !important;
+        display: flex !important;
+        align-items: center !important;
+        width: 100% !important;
+    }
+    
+    [data-testid="stSidebar"] div.stButton > button:hover {
+        background: rgba(99, 102, 241, 0.08) !important;
+        border-color: rgba(129, 140, 248, 0.2) !important;
+        color: #ffffff !important;
+        transform: translateX(4px) !important;
+        box-shadow: none !important;
+    }
+    
+    /* Active button indicator */
+    [data-testid="stSidebar"] div.stButton > button:active,
+    [data-testid="stSidebar"] div.stButton > button:focus {
+        background: linear-gradient(90deg, rgba(99, 102, 241, 0.15) 0%, rgba(167, 139, 250, 0.05) 100%) !important;
+        border-left: 3px solid #818cf8 !important;
+        color: #ffffff !important;
+    }
+
+    /* 8. Experiment Dashboard Cards & Badges */
+    .exp-header-card {
+        background: rgba(17, 24, 39, 0.45) !important;
+        border: 1px solid rgba(255, 255, 255, 0.06) !important;
+        border-radius: 16px !important;
+        padding: 24px 30px !important;
+        margin-bottom: 25px !important;
+        backdrop-filter: blur(12px) !important;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .exp-header-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, #6366f1, #c084fc, #f472b6);
+    }
+    
+    .exp-title {
+        font-size: 2.2rem !important;
+        font-weight: 800 !important;
+        margin-bottom: 8px !important;
+        background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+    }
+    
+    .exp-meta-container {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+    }
+    
+    .exp-badge {
+        font-size: 0.725rem !important;
+        font-weight: 600 !important;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 4px 10px !important;
+        border-radius: 100px !important;
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    .exp-badge.category {
+        background-color: rgba(99, 102, 241, 0.12) !important;
+        border: 1px solid rgba(99, 102, 241, 0.25) !important;
+        color: #a5b4fc !important;
+    }
+    
+    .exp-badge.status-ready {
+        background-color: rgba(16, 185, 129, 0.12) !important;
+        border: 1px solid rgba(16, 185, 129, 0.25) !important;
+        color: #34d399 !important;
+    }
+    
+    .exp-badge.status-template {
+        background-color: rgba(245, 158, 11, 0.12) !important;
+        border: 1px solid rgba(245, 158, 11, 0.25) !important;
+        color: #fbbf24 !important;
+    }
+    
+    .learning-objectives-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 14px;
+        margin: 20px 0;
+    }
+    
+    .objective-card {
+        background: rgba(255, 255, 255, 0.02) !important;
+        border: 1px solid rgba(255, 255, 255, 0.04) !important;
+        border-radius: 12px !important;
+        padding: 16px 20px !important;
+        transition: all 0.3s ease !important;
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+    }
+    
+    .objective-card:hover {
+        border-color: rgba(129, 140, 248, 0.2) !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+        transform: translateY(-2px);
+    }
+    
+    .objective-number {
+        font-family: 'Outfit', sans-serif !important;
+        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        color: #818cf8 !important;
+        background: rgba(99, 102, 241, 0.1) !important;
+        border-radius: 50% !important;
+        width: 26px !important;
+        height: 26px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .objective-text {
+        font-size: 0.85rem !important;
+        color: #d1d5db !important;
+        line-height: 1.4 !important;
+    }
+    
+    /* Playground Panel Layouts */
+    .playground-section {
+        background: rgba(17, 24, 39, 0.35) !important;
+        border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        border-radius: 14px !important;
+        padding: 24px !important;
+        margin-bottom: 25px !important;
+    }
 </style>
 """)

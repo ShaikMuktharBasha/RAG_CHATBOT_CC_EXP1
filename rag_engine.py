@@ -76,7 +76,7 @@ class RAGEngine:
                 "error": str(e)
             }
             
-    def answer_question(self, query, top_k=5):
+    def answer_question(self, query, top_k=5, language="English"):
         """Retrieve relevant context and generate answer."""
         if not self.vectorstore:
             return {"error": "Please upload and process a handbook first."}
@@ -85,8 +85,21 @@ class RAGEngine:
              return {"error": "LLM is not initialized (missing API key)."}
              
         try:
-            # Create chains
-            document_chain = create_stuff_documents_chain(self.llm, self.prompt)
+            # Dynamically adjust prompt if a non-English target language is specified
+            if language and language.lower() != "english":
+                custom_prompt = ChatPromptTemplate.from_messages([
+                    ("system", "You are a helpful and professional Multilingual Employee Handbook Assistant. "
+                                f"Answer the user's question based strictly on the provided context. "
+                                f"IMPORTANT: You MUST write your final response entirely in {language}.\n\n"
+                                "Context:\n{context}\n\n"
+                                f"If you don't know the answer based on the context, say that you don't know in {language} "
+                                "and encourage them to contact HR."),
+                    ("human", "{input}")
+                ])
+                document_chain = create_stuff_documents_chain(self.llm, custom_prompt)
+            else:
+                document_chain = create_stuff_documents_chain(self.llm, self.prompt)
+                
             retriever = self.vectorstore.as_retriever(search_kwargs={"k": top_k})
             retrieval_chain = create_retrieval_chain(retriever, document_chain)
             
