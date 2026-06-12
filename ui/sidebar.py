@@ -4,6 +4,9 @@ import streamlit as st
 def render_sidebar():
     """Renders the settings sidebar and returns the active settings and file uploader."""
     with st.sidebar:
+        # Display current logged-in user
+        st.markdown(f"<div style='background-color: rgba(255, 255, 255, 0.03); padding: 10px 14px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);'><span style='color: #a5b4fc; font-weight: 600; font-size: 0.85rem;'>👤 User:</span> <span style='font-weight: 500; font-size: 0.85rem;'>{st.session_state.get('username', '')}</span></div>", unsafe_allow_html=True)
+        
         st.markdown("<h2 style='font-size: 1.35rem; font-weight: 700; color: #ffffff; margin-bottom: 4px; margin-top: 10px;'>⚙️ RAG Settings</h2>", unsafe_allow_html=True)
         st.markdown("<p style='color: #64748b; font-size: 0.8rem; margin-bottom: 25px;'>Configure API connections and parameters.</p>", unsafe_allow_html=True)
         
@@ -101,5 +104,16 @@ def render_sidebar():
                 st.session_state.messages = []
                 st.toast("Start a new chat thread!", icon="🧹")
                 st.rerun()
+                
+        # 6. Log Out Control
+        st.markdown("<hr style='border-color: rgba(255,255,255,0.05); margin: 20px 0;'>", unsafe_allow_html=True)
+        logout_button = st.button("🚪 Log Out", key="logout_btn")
+        if logout_button:
+            st.session_state.authenticated = False
+            st.session_state.username = ""
+            st.session_state.processed = False
+            st.session_state.messages = []
+            st.session_state.doc_info = {"name": "", "pages": 0, "chunks": 0}
+            st.rerun()
                 
     return active_api_key, selected_model, uploaded_file

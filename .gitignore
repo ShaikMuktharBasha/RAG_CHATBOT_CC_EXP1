@@ -21,3 +21,7 @@ __pycache__/
 
 # RAG local vector store indexes
 faiss_index/
+
+# Database files
+*.db
+users.db
