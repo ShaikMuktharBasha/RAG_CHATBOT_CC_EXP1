@@ -3,6 +3,7 @@ import sqlite3
 import hashlib
 import os
 import base64
+import textwrap
 
 DB_FILE = "users.db"
 
@@ -87,90 +88,88 @@ def render_auth_page():
             animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        /* Right Form pane container */
-        .login-right-pane {
-            background-color: #ffffff !important;
-            border-radius: 16px !important;
-            padding: 40px 36px !important;
-            min-height: 520px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25) !important;
-            border: 1px solid rgba(255, 255, 255, 0.08) !important;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        
-        /* Force light-colored labels and inputs inside right pane */
-        .login-right-pane p,
-        .login-right-pane h2,
-        .login-right-pane span,
-        .login-right-pane label {
-            color: #1f2937 !important;
-        }
-        .login-right-pane p.sub-heading {
-            color: #6b7280 !important;
-            font-size: 0.85rem !important;
-            margin-bottom: 25px !important;
-        }
-        .login-right-pane .upper-header {
+        /* Form Header label */
+        .upper-header {
             color: #9ca3af !important;
             font-size: 0.75rem !important;
             font-weight: 700 !important;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            margin-bottom: 0px;
+            margin-top: 8px;
+        }
+        
+        /* Style the native Streamlit Form container box to look like a premium white card */
+        div[data-testid="stForm"] {
+            background-color: #ffffff !important;
+            border-radius: 16px !important;
+            padding: 30px !important;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25) !important;
+            border: 1px solid rgba(0, 0, 0, 0.05) !important;
+            min-height: 440px;
+        }
+        
+        /* Force light theme colors inside the white form card */
+        div[data-testid="stForm"] p,
+        div[data-testid="stForm"] h2,
+        div[data-testid="stForm"] label,
+        div[data-testid="stForm"] span {
+            color: #1f2937 !important;
         }
         
         /* Redesign Streamlit input elements inside the form container to be clean light inputs */
-        .login-right-pane div[data-baseweb="input"],
-        .login-right-pane input {
+        div[data-testid="stForm"] div[data-baseweb="input"] {
             background-color: #ffffff !important;
             color: #1f2937 !important;
             border: 1px solid #d1d5db !important;
             border-radius: 8px !important;
         }
-        .login-right-pane div[data-baseweb="input"]:focus-within {
+        div[data-testid="stForm"] input {
+            color: #1f2937 !important;
+            background-color: transparent !important;
+        }
+        div[data-testid="stForm"] div[data-baseweb="input"]:focus-within {
             border-color: #ea580c !important;
             box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.1) !important;
         }
         
-        /* Redesign Streamlit buttons inside form container to be solid Orange */
-        .login-right-pane div.stButton > button {
+        /* Redesign Streamlit buttons inside the white form container to be solid Orange */
+        div[data-testid="stForm"] button {
             background: linear-gradient(135deg, #e05615 0%, #f97316 100%) !important;
             color: #ffffff !important;
             border: none !important;
             border-radius: 8px !important;
-            padding: 12px 24px !important;
+            padding: 10px 20px !important;
             font-size: 0.95rem !important;
             font-weight: 700 !important;
             box-shadow: 0 4px 15px rgba(224, 86, 21, 0.35) !important;
             transition: all 0.2s ease !important;
             width: 100% !important;
         }
-        .login-right-pane div.stButton > button:hover {
+        div[data-testid="stForm"] button:hover {
             background: linear-gradient(135deg, #ea580c 0%, #fb923c 100%) !important;
             box-shadow: 0 6px 20px rgba(224, 86, 21, 0.45) !important;
             transform: translateY(-2px) !important;
         }
-        .login-right-pane div.stButton > button * {
+        div[data-testid="stForm"] button * {
             color: #ffffff !important;
             font-weight: 700 !important;
         }
         
-        /* Clean text link button styling for toggle */
-        .toggle-link-btn {
-            background: none !important;
-            border: none !important;
-            padding: 0 !important;
-            color: #ea580c !important;
-            text-decoration: none !important;
-            cursor: pointer;
+        /* Style the header switch buttons */
+        div.stButton > button[data-testid="baseButton-secondary"] {
+            background: rgba(255, 255, 255, 0.03) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: #e2e8f0 !important;
+            border-radius: 8px !important;
+            padding: 6px 14px !important;
+            font-size: 0.8rem !important;
             font-weight: 600 !important;
-            font-size: 0.85rem !important;
-            transition: color 0.2s ease;
+            transition: all 0.2s ease !important;
         }
-        .toggle-link-btn:hover {
-            color: #f97316 !important;
+        div.stButton > button[data-testid="baseButton-secondary"]:hover {
+            background: rgba(255, 255, 255, 0.08) !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+            color: #ffffff !important;
         }
         </style>
     """, unsafe_allow_html=True)
@@ -181,7 +180,7 @@ def render_auth_page():
     with col_main:
         st.markdown('<div class="login-main-card">', unsafe_allow_html=True)
         
-        # Split layout: 1.2 for the visual banner, 1 for the form
+        # Split layout: 1.3 for the visual banner, 1 for the form
         col_banner, col_form = st.columns([1.3, 1], gap="medium")
         
         # ----------------- LEFT PANEL: VISUAL BANNER WITH OVERLAY -----------------
@@ -194,7 +193,8 @@ def render_auth_page():
             else:
                 background_css = "background-color: #e05615;"  # Fallback solid color
                 
-            st.markdown(f"""
+            # Use textwrap.dedent to strip indentation so markdown doesn't treat the HTML string as a code block
+            st.markdown(textwrap.dedent(f"""
             <div style="{background_css} background-size: cover; background-position: center; border-radius: 16px; min-height: 520px; padding: 40px; display: flex; align-items: flex-end; position: relative;">
                 <!-- Dark Gradient Overlay for text readability -->
                 <div style="position: absolute; top:0; left:0; right:0; bottom:0; background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%); border-radius: 16px;"></div>
@@ -222,13 +222,11 @@ def render_auth_page():
                     </div>
                 </div>
             </div>
-            """, unsafe_allow_html=True)
+            """), unsafe_allow_html=True)
             
         # ----------------- RIGHT PANEL: CLEAN LOGIN/SIGNUP FORM -----------------
         with col_form:
-            st.markdown('<div class="login-right-pane">', unsafe_allow_html=True)
-            
-            # Form Header & Toggle
+            # Form Header & Toggle (Outside of Form Card)
             col_hdr1, col_hdr2 = st.columns([1, 1])
             with col_hdr1:
                 if st.session_state.auth_mode == "login":
@@ -246,50 +244,54 @@ def render_auth_page():
                         st.session_state.auth_mode = "login"
                         st.rerun()
             
-            # Login Form rendering
+            # Form Card container (using st.form so elements stay inside cleanly)
             if st.session_state.auth_mode == "login":
-                st.markdown("<h2 style='font-size: 2.1rem; font-weight: 700; margin-top: 20px; margin-bottom: 2px;'>Log in</h2>", unsafe_allow_html=True)
-                st.markdown("<p class='sub-heading'>Open your saved uploads, summaries, and 22 NLP experiments from one unified workspace.</p>", unsafe_allow_html=True)
-                
-                login_username = st.text_input("USERNAME / EMAIL", key="login_user_input", placeholder="you@example.com").strip()
-                login_password = st.text_input("PASSWORD", type="password", key="login_pass_input", placeholder="Enter your password")
-                
-                st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
-                if st.button("Log in", key="login_btn"):
-                    if not login_username or not login_password:
-                        st.error("Please fill in all fields.")
-                    elif login_user(login_username, login_password):
-                        st.session_state.authenticated = True
-                        st.session_state.username = login_username
-                        st.toast("Successfully signed in!", icon="🚀")
-                        st.rerun()
-                    else:
-                        st.error("Invalid username or password.")
-                        
-            # Signup Form rendering
-            else:
-                st.markdown("<h2 style='font-size: 2.1rem; font-weight: 700; margin-top: 20px; margin-bottom: 2px;'>Sign up</h2>", unsafe_allow_html=True)
-                st.markdown("<p class='sub-heading'>Register a secure account to save model configurations and track your experiment completions.</p>", unsafe_allow_html=True)
-                
-                signup_username = st.text_input("USERNAME / EMAIL", key="signup_user_input", placeholder="choose@example.com").strip()
-                signup_password = st.text_input("PASSWORD", type="password", key="signup_pass_input", placeholder="Choose password")
-                signup_confirm = st.text_input("CONFIRM PASSWORD", type="password", key="signup_confirm_input", placeholder="Confirm password")
-                
-                st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
-                if st.button("Create Account", key="signup_btn"):
-                    if not signup_username or not signup_password or not signup_confirm:
-                        st.error("Please fill in all fields.")
-                    elif signup_password != signup_confirm:
-                        st.error("Passwords do not match.")
-                    else:
-                        success, message = signup_user(signup_username, signup_password)
-                        if success:
-                            st.success(message)
-                            st.session_state.auth_mode = "login"
+                with st.form(key="login_form"):
+                    st.markdown("<h2 style='font-size: 2.1rem; font-weight: 700; margin-top: 0px; margin-bottom: 2px;'>Log in</h2>", unsafe_allow_html=True)
+                    st.markdown("<p style='color: #6b7280; font-size: 0.85rem; margin-bottom: 20px;'>Open your saved uploads, summaries, and 22 NLP experiments from one unified workspace.</p>", unsafe_allow_html=True)
+                    
+                    login_username = st.text_input("USERNAME / EMAIL", key="login_user_input", placeholder="you@example.com").strip()
+                    login_password = st.text_input("PASSWORD", type="password", key="login_pass_input", placeholder="Enter your password")
+                    
+                    st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
+                    submit_login = st.form_submit_button("Log in")
+                    
+                    if submit_login:
+                        if not login_username or not login_password:
+                            st.error("Please fill in all fields.")
+                        elif login_user(login_username, login_password):
+                            st.session_state.authenticated = True
+                            st.session_state.username = login_username
+                            st.toast("Successfully signed in!", icon="🚀")
                             st.rerun()
                         else:
-                            st.error(message)
+                            st.error("Invalid username or password.")
                             
-            st.markdown('</div>', unsafe_allow_html=True)
+            # Signup Form rendering
+            else:
+                with st.form(key="signup_form"):
+                    st.markdown("<h2 style='font-size: 2.1rem; font-weight: 700; margin-top: 0px; margin-bottom: 2px;'>Sign up</h2>", unsafe_allow_html=True)
+                    st.markdown("<p style='color: #6b7280; font-size: 0.85rem; margin-bottom: 20px;'>Register a secure account to save model configurations and track your experiment completions.</p>", unsafe_allow_html=True)
+                    
+                    signup_username = st.text_input("USERNAME / EMAIL", key="signup_user_input", placeholder="choose@example.com").strip()
+                    signup_password = st.text_input("PASSWORD", type="password", key="signup_pass_input", placeholder="Choose password")
+                    signup_confirm = st.text_input("CONFIRM PASSWORD", type="password", key="signup_confirm_input", placeholder="Confirm password")
+                    
+                    st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
+                    submit_signup = st.form_submit_button("Create Account")
+                    
+                    if submit_signup:
+                        if not signup_username or not signup_password or not signup_confirm:
+                            st.error("Please fill in all fields.")
+                        elif signup_password != signup_confirm:
+                            st.error("Passwords do not match.")
+                        else:
+                            success, message = signup_user(signup_username, signup_password)
+                            if success:
+                                st.success(message)
+                                st.session_state.auth_mode = "login"
+                                st.rerun()
+                            else:
+                                st.error(message)
             
         st.markdown('</div>', unsafe_allow_html=True)
