@@ -353,6 +353,31 @@ print("Quantized Model Loaded successfully onto GPU!")
 def render_sandbox_playground(exp_id, active_api_key, selected_model):
     """Renders the general dashboard and interactive simulation playground for Experiments 3-22."""
     
+    # Experiment names map
+    EXP_NAMES = {
+        3: "Document Summarizer & QA",
+        4: "PDF Structure & Table Parser",
+        5: "Text Similarity & Vector Embeddings",
+        6: "Named Entity Recognition (NER)",
+        7: "Sentiment & Emotion Classifier",
+        8: "Text Classification & Intent Detection",
+        9: "Keyword & Key-phrase Extractor",
+        10: "SQL Database Explorer (SQL Agent)",
+        11: "Web Search & Knowledge Agent",
+        12: "Code Generator & Bug Fixer",
+        13: "Conversation Memory Playground",
+        14: "Creative Content Copywriter",
+        15: "Image Caption Generator",
+        16: "Visual Question Answering (VQA)",
+        17: "Audio Transcription & Summarizer",
+        18: "OCR & Form Data Extractor",
+        19: "RAG Triad Evaluation Lab",
+        20: "Prompt Injection Defender",
+        21: "LLM Latency & Cost Calculator",
+        22: "Model Quantization Dashboard"
+    }
+    exp_name = EXP_NAMES.get(exp_id, f"Experiment {exp_id}")
+    
     # Initialize session state for custom description and objectives
     custom_desc_key = f"exp_desc_{exp_id}"
     custom_objectives_key = f"exp_objectives_{exp_id}"
@@ -366,9 +391,9 @@ def render_sandbox_playground(exp_id, active_api_key, selected_model):
     st.markdown(f"""
     <div class="exp-header-card">
         <div class="exp-meta-container">
-            <span class="exp-badge status-template">🧪 Experiment Workspace</span>
+            <span class="exp-badge status-template">Experiment Workspace</span>
         </div>
-        <div class="exp-title">Experiment {exp_id}</div>
+        <div class="exp-title">Exp{exp_id}_{exp_name}</div>
     </div>
     """, unsafe_allow_html=True)
     
@@ -454,7 +479,7 @@ def render_sandbox_playground(exp_id, active_api_key, selected_model):
                             objectives_context = ", ".join(objectives_list) if objectives_list else "None provided."
                             
                             system_prompt = (
-                                f"You are simulating the execution of a college laboratory experiment: 'Experiment {exp_id}'.\n"
+                                f"You are simulating the execution of a college laboratory experiment: 'Exp{exp_id}_{exp_name}'.\n"
                                 f"Description: {desc_context}\n"
                                 f"Learning Objectives: {objectives_context}\n\n"
                                 "The student user has run this experiment sandbox with the following input parameters/text:\n"

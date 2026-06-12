@@ -13,14 +13,39 @@ def render_sidebar():
         st.markdown("<h2 style='font-size: 1.35rem; font-weight: 700; color: #ffffff; margin-bottom: 4px; margin-top: 10px;'>🎓 Laboratory Works</h2>", unsafe_allow_html=True)
         st.markdown("<p style='color: #64748b; font-size: 0.8rem; margin-bottom: 20px;'>Select an experiment to open its dedicated workspace.</p>", unsafe_allow_html=True)
         
+        # Experiment names map
+        EXP_NAMES = {
+            1: "Employee Handbook (RAG)",
+            2: "Multilingual RAG Translator",
+            3: "Document Summarizer & QA",
+            4: "PDF Structure & Table Parser",
+            5: "Text Similarity & Vector Embeddings",
+            6: "Named Entity Recognition (NER)",
+            7: "Sentiment & Emotion Classifier",
+            8: "Text Classification & Intent Detection",
+            9: "Keyword & Key-phrase Extractor",
+            10: "SQL Database Explorer (SQL Agent)",
+            11: "Web Search & Knowledge Agent",
+            12: "Code Generator & Bug Fixer",
+            13: "Conversation Memory Playground",
+            14: "Creative Content Copywriter",
+            15: "Image Caption Generator",
+            16: "Visual Question Answering (VQA)",
+            17: "Audio Transcription & Summarizer",
+            18: "OCR & Form Data Extractor",
+            19: "RAG Triad Evaluation Lab",
+            20: "Prompt Injection Defender",
+            21: "LLM Latency & Cost Calculator",
+            22: "Model Quantization Dashboard"
+        }
+        
         # 2. Render flat experiment selector buttons
         active_exp = st.session_state.get("selected_experiment", 1)
         
         # Scrollable container for the flat list of 22 buttons
         st.markdown("<div style='max-height: 380px; overflow-y: auto; padding-right: 5px; margin-bottom: 20px;'>", unsafe_allow_html=True)
         for i in range(1, 23):
-            is_active = (active_exp == i)
-            btn_label = f"👉 Experiment {i}" if is_active else f"🧪 Experiment {i}"
+            btn_label = f"Exp{i}_{EXP_NAMES[i]}"
             
             if st.button(btn_label, key=f"sidebar_exp_btn_{i}", use_container_width=True):
                 st.session_state.selected_experiment = i

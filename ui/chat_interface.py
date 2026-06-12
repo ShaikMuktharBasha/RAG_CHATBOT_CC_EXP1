@@ -8,7 +8,7 @@ def render_chat_interface(active_api_key, selected_model):
     st.markdown(f"""
 <div class="header-container" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
     <div>
-        <h1 class="main-title" style="font-size: 1.6rem; margin: 0;">DocuMind Chat</h1>
+        <h1 class="main-title" style="font-size: 1.6rem; margin: 0;">Exp1_Employee Handbook (RAG)</h1>
         <p class="subtitle" style="font-size: 0.8rem; margin: 0;">Active document: <strong>{st.session_state.doc_info['name']}</strong></p>
     </div>
 </div>

@@ -13,7 +13,7 @@ def render_multilingual_rag_page(active_api_key, selected_model):
     st.markdown("""
     <div class="header-container" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px;">
         <div>
-            <h1 class="main-title" style="font-size: 1.6rem; margin: 0;">🌐 Multilingual RAG Translator</h1>
+            <h1 class="main-title" style="font-size: 1.6rem; margin: 0;">Exp2_Multilingual RAG Translator</h1>
             <p class="subtitle" style="font-size: 0.8rem; margin: 0;">Query documents in English and receive responses translated to your chosen language.</p>
         </div>
     </div>
