@@ -1,7 +1,6 @@
 import os
 import streamlit as st
 from dotenv import load_dotenv
-from experiments_config import EXPERIMENTS
 
 def render_sidebar():
     """Renders the settings sidebar with 22 experiment buttons and global configuration settings."""
@@ -11,32 +10,23 @@ def render_sidebar():
         st.markdown(f"<div style='background-color: rgba(255, 255, 255, 0.03); padding: 10px 14px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);'><span style='color: #a5b4fc; font-weight: 600; font-size: 0.85rem;'>👤 User:</span> <span style='font-weight: 500; font-size: 0.85rem;'>{st.session_state.get('username', '')}</span></div>", unsafe_allow_html=True)
         
         # 1. Title
-        st.markdown("<h2 style='font-size: 1.35rem; font-weight: 700; color: #ffffff; margin-bottom: 4px; margin-top: 10px;'>🎓 College Experiments</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='font-size: 1.35rem; font-weight: 700; color: #ffffff; margin-bottom: 4px; margin-top: 10px;'>🎓 Laboratory Works</h2>", unsafe_allow_html=True)
         st.markdown("<p style='color: #64748b; font-size: 0.8rem; margin-bottom: 20px;'>Select an experiment to open its dedicated workspace.</p>", unsafe_allow_html=True)
         
-        # 2. Group experiments by category
-        categories = {}
-        for exp_id, exp in EXPERIMENTS.items():
-            cat = exp["category"]
-            if cat not in categories:
-                categories[cat] = []
-            categories[cat].append((exp_id, exp))
-            
-        # 3. Render experiment selector buttons
+        # 2. Render flat experiment selector buttons
         active_exp = st.session_state.get("selected_experiment", 1)
         
-        for cat_name, items in categories.items():
-            # Check if this category contains the active experiment, default to open it
-            is_expanded = any(exp_id == active_exp for exp_id, _ in items)
-            with st.expander(f"📁 {cat_name}", expanded=is_expanded):
-                for exp_id, exp in items:
-                    is_active = (active_exp == exp_id)
-                    btn_label = f"👉 Exp {exp_id}: {exp['title']}" if is_active else f"{exp['icon']} Exp {exp_id}: {exp['title']}"
-                    
-                    if st.button(btn_label, key=f"sidebar_exp_btn_{exp_id}", use_container_width=True):
-                        st.session_state.selected_experiment = exp_id
-                        st.session_state.messages = []  # Clear chat history on switching experiments
-                        st.rerun()
+        # Scrollable container for the flat list of 22 buttons
+        st.markdown("<div style='max-height: 380px; overflow-y: auto; padding-right: 5px; margin-bottom: 20px;'>", unsafe_allow_html=True)
+        for i in range(1, 23):
+            is_active = (active_exp == i)
+            btn_label = f"👉 Experiment {i}" if is_active else f"🧪 Experiment {i}"
+            
+            if st.button(btn_label, key=f"sidebar_exp_btn_{i}", use_container_width=True):
+                st.session_state.selected_experiment = i
+                st.session_state.messages = []  # Clear chat history on switching experiments
+                st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
                         
         st.markdown("<hr style='border-color: rgba(255,255,255,0.05); margin: 20px 0;'>", unsafe_allow_html=True)
         
