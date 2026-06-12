@@ -1,0 +1,23 @@
+# Virtual environments
+venv/
+ENV/
+env/
+.env
+
+# Python caching
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE configurations
+.vscode/
+.idea/
+
+# Streamlit secrets and config (secrets should not be committed)
+.streamlit/secrets.toml
+
+# Document files (to avoid committing large test PDFs)
+*.pdf
+
+# RAG local vector store indexes
+faiss_index/
