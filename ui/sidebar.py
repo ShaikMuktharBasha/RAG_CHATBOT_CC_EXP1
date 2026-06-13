@@ -6,8 +6,21 @@ def render_sidebar():
     """Renders the settings sidebar with 22 experiment buttons and global configuration settings."""
     load_dotenv()
     with st.sidebar:
-        # Display current logged-in user
-        st.markdown(f"<div style='background-color: rgba(255, 255, 255, 0.03); padding: 10px 14px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);'><span style='color: #a5b4fc; font-weight: 600; font-size: 0.85rem;'><i class=\"fa-solid fa-user\" style=\"color: #a5b4fc; margin-right: 5px;\"></i> User:</span> <span style='font-weight: 500; font-size: 0.85rem;'>{st.session_state.get('username', '')}</span></div>", unsafe_allow_html=True)
+        # Display current logged-in user card with logout button inline
+        username = st.session_state.get("username", "")
+        user_col, logout_col = st.columns([3, 1])
+        with user_col:
+            st.markdown(f"<div style='background-color: rgba(255, 255, 255, 0.03); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); height: 42px; display: flex; align-items: center;'><span style='color: #a5b4fc; font-weight: 600; font-size: 0.85rem;'><i class=\"fa-solid fa-user\" style=\"color: #a5b4fc; margin-right: 5px;\"></i> User:</span> <span style='font-weight: 500; font-size: 0.85rem; margin-left: 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;' title='{username}'>{username}</span></div>", unsafe_allow_html=True)
+        with logout_col:
+            logout_button = st.button("", key="logout_btn", icon=":material/logout:", help="Log Out", use_container_width=True)
+            if logout_button:
+                st.session_state.authenticated = False
+                st.session_state.username = ""
+                st.session_state.processed = False
+                st.session_state.messages = []
+                st.session_state.doc_info = {"name": "", "pages": 0, "chunks": 0}
+                st.session_state.selected_experiment = 1
+                st.rerun()
         
         # 1. Title
         st.markdown("<h2 style='font-size: 1.35rem; font-weight: 700; color: #ffffff; margin-bottom: 4px; margin-top: 10px;'><i class=\"fa-solid fa-graduation-cap\" style=\"margin-right: 8px; color: #818cf8;\"></i> Laboratory Works</h2>", unsafe_allow_html=True)
@@ -142,16 +155,6 @@ def render_sidebar():
                 </div>
                 """, unsafe_allow_html=True)
                 
-        # 6. Log Out Control
-        st.markdown("<hr style='border-color: rgba(255,255,255,0.05); margin: 20px 0;'>", unsafe_allow_html=True)
-        logout_button = st.button("Log Out", key="logout_btn", icon=":material/logout:")
-        if logout_button:
-            st.session_state.authenticated = False
-            st.session_state.username = ""
-            st.session_state.processed = False
-            st.session_state.messages = []
-            st.session_state.doc_info = {"name": "", "pages": 0, "chunks": 0}
-            st.session_state.selected_experiment = 1
-            st.rerun()
+        # (Log Out control moved inline with user card at the top)
             
     return active_api_key, selected_model, uploaded_file, active_groq_key
