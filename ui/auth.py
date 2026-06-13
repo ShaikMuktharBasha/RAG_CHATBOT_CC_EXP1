@@ -266,7 +266,7 @@ def render_auth_page():
                         elif login_user(login_username, login_password):
                             st.session_state.authenticated = True
                             st.session_state.username = login_username
-                            st.toast("Successfully signed in!", icon="🚀")
+                            st.toast("Successfully signed in!", icon=":material/rocket_launch:")
                             st.rerun()
                         else:
                             st.error("Invalid username or password.")

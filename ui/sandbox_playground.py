@@ -373,7 +373,7 @@ def render_sandbox_playground(exp_id, active_api_key, selected_model):
     """, unsafe_allow_html=True)
     
     # 2. Render Custom Documentation Editor
-    st.markdown("### 📝 Custom Experiment Documentation")
+    st.markdown("### <i class=\"fa-solid fa-file-signature\" style=\"margin-right: 8px; color: #818cf8;\"></i> Custom Experiment Documentation", unsafe_allow_html=True)
     st.markdown("<p style='color: #9ca3af; font-size: 0.85rem; margin-top: -10px; margin-bottom: 15px;'>Enter your custom description and learning objectives below. They will be used to simulate results.</p>", unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
@@ -399,7 +399,7 @@ def render_sandbox_playground(exp_id, active_api_key, selected_model):
     
     # Render objectives grid if any exist
     if objectives_list:
-        st.markdown("#### 🎓 Current Learning Objectives")
+        st.markdown("#### <i class=\"fa-solid fa-graduation-cap\" style=\"margin-right: 8px; color: #818cf8;\"></i> Current Learning Objectives", unsafe_allow_html=True)
         st.markdown('<div class="learning-objectives-grid">', unsafe_allow_html=True)
         for idx, obj in enumerate(objectives_list):
             st.markdown(f"""
@@ -412,7 +412,7 @@ def render_sandbox_playground(exp_id, active_api_key, selected_model):
         st.markdown("<br>", unsafe_allow_html=True)
     
     # 3. Interactive Sandbox Interface
-    st.markdown("### ⚙️ Interactive Laboratory Playground")
+    st.markdown("### <i class=\"fa-solid fa-flask\" style=\"margin-right: 8px; color: #818cf8;\"></i> Interactive Laboratory Playground", unsafe_allow_html=True)
     st.markdown("<p style='color: #9ca3af; font-size: 0.85rem; margin-top: -10px; margin-bottom: 15px;'>Test input variables and simulate output results in the execution environment.</p>", unsafe_allow_html=True)
     
     with st.container():
@@ -426,9 +426,9 @@ def render_sandbox_playground(exp_id, active_api_key, selected_model):
         
         col_run, col_clear = st.columns([4, 1])
         with col_run:
-            run_btn = st.button("🚀 Run Experiment Simulation", key=f"run_sandbox_btn_{exp_id}", use_container_width=True)
+            run_btn = st.button("Run Experiment Simulation", key=f"run_sandbox_btn_{exp_id}", use_container_width=True, icon=":material/play_arrow:")
         with col_clear:
-            clear_btn = st.button("🧹 Clear Logs", key=f"clear_sandbox_btn_{exp_id}", use_container_width=True)
+            clear_btn = st.button("Clear Logs", key=f"clear_sandbox_btn_{exp_id}", use_container_width=True, icon=":material/delete:")
             
         # Session state to store simulation output
         session_out_key = f"sandbox_output_history_{exp_id}"
@@ -437,7 +437,7 @@ def render_sandbox_playground(exp_id, active_api_key, selected_model):
             
         if run_btn:
             if not user_input.strip():
-                st.error("❌ Please provide a valid input value to simulate the experiment.")
+                st.error("Please provide a valid input value to simulate the experiment.", icon=":material/error:")
             else:
                 with st.spinner("Initializing simulation environments and generating execution outputs..."):
                     # Simulation logic
@@ -469,12 +469,12 @@ def render_sandbox_playground(exp_id, active_api_key, selected_model):
                             sim_response = llm.invoke(system_prompt).content
                             st.session_state[session_out_key] = sim_response
                         except Exception as e:
-                            st.error(f"❌ Error invoking AI simulation: {str(e)}")
+                            st.error(f"Error invoking AI simulation: {str(e)}", icon=":material/error:")
                             # Set fallback mock response
                             st.session_state[session_out_key] = generate_fallback_mock(exp_id, user_input)
                     else:
                         # Fallback mock response when API key is missing
-                        st.info("ℹ️ Gemini API key is missing. Displaying simulated local mock response. Enter your API key in the sidebar for live model simulations.")
+                        st.info("Gemini API key is missing. Displaying simulated local mock response. Enter your API key in the sidebar for live model simulations.", icon=":material/info:")
                         time.sleep(1.5)  # Simulate execution lag
                         st.session_state[session_out_key] = generate_fallback_mock(exp_id, user_input)
                         
@@ -490,7 +490,7 @@ def render_sandbox_playground(exp_id, active_api_key, selected_model):
             
     # 4. Source Code Implementation Guide Accordion
     st.markdown("<br><hr style='border-color: rgba(255,255,255,0.05); margin: 20px 0;'>", unsafe_allow_html=True)
-    with st.expander("📄 Core Code Implementation Guide", expanded=False):
+    with st.expander("Core Code Implementation Guide", expanded=False, icon=":material/code:"):
         st.markdown(f"""
         <p style='color: #9ca3af; font-size: 0.85rem; line-height: 1.4;'>
             To write this laboratory experiment in your codebase, you can adapt the python snippet below. 

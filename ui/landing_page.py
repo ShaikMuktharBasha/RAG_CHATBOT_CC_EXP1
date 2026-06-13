@@ -4,7 +4,7 @@ def render_landing_page(process_pdf_callback):
     """Renders the landing view for document uploads when no document is processed yet."""
     st.markdown("""
 <div class="centered-welcome">
-    <div style="font-size: 3.2rem; margin-bottom: 20px; text-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);">💬</div>
+    <div style="font-size: 3.2rem; margin-bottom: 20px; text-shadow: 0 10px 25px rgba(99, 102, 241, 0.2); color: #818cf8;"><i class="fa-solid fa-comments"></i></div>
     <h1 class="welcome-title">What would you like to analyze?</h1>
     <p class="welcome-subtitle">
         Upload a PDF handbook or corporate document to activate the AI assistant, summarize its contents, or extract key takeaways.
@@ -29,9 +29,9 @@ def render_landing_page(process_pdf_callback):
     st.markdown('<div class="prompt-grid">', unsafe_allow_html=True)
     col1, col2 = st.columns(2)
     with col1:
-        st.button("📝 Summarize Document\nUpload a PDF file to activate this prompt.", key="pre_sum", disabled=True)
-        st.button("❓ Draft FAQ List\nUpload a PDF file to activate this prompt.", key="pre_faq", disabled=True)
+        st.button("Summarize Document\nUpload a PDF file to activate this prompt.", key="pre_sum", disabled=True, icon=":material/description:")
+        st.button("Draft FAQ List\nUpload a PDF file to activate this prompt.", key="pre_faq", disabled=True, icon=":material/help:")
     with col2:
-        st.button("🔑 Key Takeaways\nUpload a PDF file to activate this prompt.", key="pre_takeaways", disabled=True)
-        st.button("🔍 Term Definitions\nUpload a PDF file to activate this prompt.", key="pre_def", disabled=True)
+        st.button("Key Takeaways\nUpload a PDF file to activate this prompt.", key="pre_takeaways", disabled=True, icon=":material/key:")
+        st.button("Term Definitions\nUpload a PDF file to activate this prompt.", key="pre_def", disabled=True, icon=":material/find_in_page:")
     st.markdown('</div>', unsafe_allow_html=True)

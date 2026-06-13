@@ -7,10 +7,10 @@ def render_sidebar():
     load_dotenv()
     with st.sidebar:
         # Display current logged-in user
-        st.markdown(f"<div style='background-color: rgba(255, 255, 255, 0.03); padding: 10px 14px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);'><span style='color: #a5b4fc; font-weight: 600; font-size: 0.85rem;'>👤 User:</span> <span style='font-weight: 500; font-size: 0.85rem;'>{st.session_state.get('username', '')}</span></div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='background-color: rgba(255, 255, 255, 0.03); padding: 10px 14px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);'><span style='color: #a5b4fc; font-weight: 600; font-size: 0.85rem;'><i class=\"fa-solid fa-user\" style=\"color: #a5b4fc; margin-right: 5px;\"></i> User:</span> <span style='font-weight: 500; font-size: 0.85rem;'>{st.session_state.get('username', '')}</span></div>", unsafe_allow_html=True)
         
         # 1. Title
-        st.markdown("<h2 style='font-size: 1.35rem; font-weight: 700; color: #ffffff; margin-bottom: 4px; margin-top: 10px;'>🎓 Laboratory Works</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='font-size: 1.35rem; font-weight: 700; color: #ffffff; margin-bottom: 4px; margin-top: 10px;'><i class=\"fa-solid fa-graduation-cap\" style=\"margin-right: 8px; color: #818cf8;\"></i> Laboratory Works</h2>", unsafe_allow_html=True)
         st.markdown("<p style='color: #64748b; font-size: 0.8rem; margin-bottom: 20px;'>Select an experiment to open its dedicated workspace.</p>", unsafe_allow_html=True)
         
         # Experiment names map (only describe Exp 1 and 2, others remain blank)
@@ -39,11 +39,11 @@ def render_sidebar():
         st.markdown("<hr style='border-color: rgba(255,255,255,0.05); margin: 20px 0;'>", unsafe_allow_html=True)
         
         # 4. Global Settings Panel
-        with st.expander("⚙️ System Configurations", expanded=True):
+        with st.expander("System Configurations", expanded=True, icon=":material/settings:"):
             # API Key Setup
             env_api_key = os.environ.get("GOOGLE_API_KEY", "")
             if env_api_key:
-                st.success("🔑 API Key loaded from environment")
+                st.success("API Key loaded from environment", icon=":material/key:")
                 active_api_key = env_api_key
             else:
                 st.markdown("<p style='font-size: 0.8rem; font-weight: 600; color: #e2e8f0; margin-bottom: 4px;'>Google Gemini API Key</p>", unsafe_allow_html=True)
@@ -56,7 +56,7 @@ def render_sidebar():
                 )
                 active_api_key = sidebar_key
                 if not sidebar_key:
-                    st.warning("⚠️ API Key required.")
+                    st.warning("API Key required.", icon=":material/warning:")
                     
             # Model Selection
             st.markdown("<p style='font-size: 0.8rem; font-weight: 600; color: #e2e8f0; margin-top: 15px; margin-bottom: 4px;'>Gemini Model Selection</p>", unsafe_allow_html=True)
@@ -81,7 +81,7 @@ def render_sidebar():
             # Groq API Key Setup
             env_groq_key = os.environ.get("GROQ_API_KEY", "")
             if env_groq_key:
-                st.success("⚡ Groq API Key loaded")
+                st.success("Groq API Key loaded", icon=":material/bolt:")
                 active_groq_key = env_groq_key
             else:
                 st.markdown("<p style='font-size: 0.8rem; font-weight: 600; color: #e2e8f0; margin-top: 15px; margin-bottom: 4px;'>Groq API Key</p>", unsafe_allow_html=True)
@@ -95,13 +95,13 @@ def render_sidebar():
                 )
                 active_groq_key = sidebar_groq_key
                 if not sidebar_groq_key:
-                    st.warning("⚠️ Groq API Key missing.")
+                    st.warning("Groq API Key missing.", icon=":material/warning:")
                 
         # 5. Conditionally Render PDF Uploader for RAG-based experiments
         uploaded_file = None
         if active_exp in [1, 2]:
             st.markdown("<hr style='border-color: rgba(255,255,255,0.05); margin: 20px 0;'>", unsafe_allow_html=True)
-            st.markdown("<h3 style='font-size: 0.9rem; font-weight: 700; color: #ffffff; margin-bottom: 10px;'>📁 Document Uploader</h3>", unsafe_allow_html=True)
+            st.markdown("<h3 style='font-size: 0.9rem; font-weight: 700; color: #ffffff; margin-bottom: 10px;'><i class=\"fa-solid fa-folder-open\" style=\"margin-right: 8px; color: #818cf8;\"></i> Document Uploader</h3>", unsafe_allow_html=True)
             
             uploaded_file = st.file_uploader(
                 "Upload PDF",
@@ -144,7 +144,7 @@ def render_sidebar():
                 
         # 6. Log Out Control
         st.markdown("<hr style='border-color: rgba(255,255,255,0.05); margin: 20px 0;'>", unsafe_allow_html=True)
-        logout_button = st.button("🚪 Log Out", key="logout_btn")
+        logout_button = st.button("Log Out", key="logout_btn", icon=":material/logout:")
         if logout_button:
             st.session_state.authenticated = False
             st.session_state.username = ""

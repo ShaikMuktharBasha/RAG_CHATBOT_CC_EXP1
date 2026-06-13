@@ -13,7 +13,7 @@ from ui import render_auth_page
 # Set Streamlit Page Configuration
 st.set_page_config(
     page_title="DocuMind RAG Assistant",
-    page_icon="💬",
+    page_icon=":material/chat:",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -66,7 +66,7 @@ else:
     def process_uploaded_pdf(file_to_process):
         """Callback to extract text, chunk, and index the uploaded PDF using the RAG Engine."""
         if not active_api_key:
-            st.error("❌ Google API Key required to initialize RAG Engine.")
+            st.error("Google API Key required to initialize RAG Engine.", icon=":material/key:")
             return
         
         with st.spinner("Extracting text and indexing document..."):
@@ -95,12 +95,12 @@ else:
                         "chunks": result["num_chunks"]
                     }
                     st.session_state.messages = [] # Clear history on new upload
-                    st.toast("Document processed successfully!", icon="✅")
+                    st.toast("Document processed successfully!", icon=":material/check_circle:")
                     st.rerun()
                 else:
-                    st.error(f"❌ Error processing document: {result.get('error')}")
+                    st.error(f"Error processing document: {result.get('error')}", icon=":material/error:")
             except Exception as e:
-                st.error(f"❌ Failed to process document: {str(e)}")
+                st.error(f"Failed to process document: {str(e)}", icon=":material/error:")
 
     # Check if sidebar file uploaded but not processed yet (only for Exp 1 and 2)
     if st.session_state.selected_experiment in [1, 2]:

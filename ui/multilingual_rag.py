@@ -61,20 +61,20 @@ def render_multilingual_rag_page(active_api_key, selected_model, active_groq_key
             
         with col_l2:
             st.markdown("<div style='height: 25px;'></div>", unsafe_allow_html=True)
-            if st.button("🧹 Clear Chat History", key="clear_multilingual_chat"):
+            if st.button("Clear Chat History", key="clear_multilingual_chat", icon=":material/delete:"):
                 st.session_state.messages = []
-                st.toast("Chat history cleared!", icon="🧹")
+                st.toast("Chat history cleared!", icon=":material/delete:")
                 st.rerun()
 
         # Active Document check
         if not st.session_state.processed:
-            st.warning("⚠️ Please upload a PDF document in the sidebar to activate the Multilingual RAG Translator.")
+            st.warning("Please upload a PDF document in the sidebar to activate the Multilingual RAG Translator.", icon=":material/warning:")
         else:
             # Sub-case: Empty chat history
             if len(st.session_state.messages) == 0:
                 st.markdown(f"""
                 <div class="centered-welcome" style="margin-top: 50px;">
-                    <div style="font-size: 2.5rem; margin-bottom: 12px;">🌍</div>
+                    <div style="font-size: 2.5rem; margin-bottom: 12px; color: #818cf8;"><i class="fa-solid fa-earth-americas"></i></div>
                     <h2 class="welcome-title" style="font-size: 1.7rem;">Document: {st.session_state.doc_info['name']}</h2>
                     <p class="welcome-subtitle" style="font-size: 0.95rem;">Ready for translation. Select a quick action or type a custom question below.</p>
                 </div>
@@ -84,26 +84,26 @@ def render_multilingual_rag_page(active_api_key, selected_model, active_groq_key
                 col1, col2 = st.columns(2)
                 lang = st.session_state.target_language
                 with col1:
-                    if st.button(f"📝 Summarize Document in {lang}\nGet a quick summary in your selected language.", key="prompt_sum_lang"):
+                    if st.button(f"Summarize Document in {lang}\nGet a quick summary in your selected language.", key="prompt_sum_lang", icon=":material/description:"):
                         st.session_state.messages.append({
                             "role": "user", 
                             "content": f"Can you summarize the main contents of this document in 3 paragraphs? Please write the response in {lang}."
                         })
                         st.rerun()
-                    if st.button(f"❓ FAQ List in {lang}\nDraft frequently asked questions in {lang}.", key="prompt_faq_lang"):
+                    if st.button(f"FAQ List in {lang}\nDraft frequently asked questions in {lang}.", key="prompt_faq_lang", icon=":material/help:"):
                         st.session_state.messages.append({
                             "role": "user", 
                             "content": f"Generate a list of 5 frequently asked questions and answers based on this document. Please write the response in {lang}."
                         })
                         st.rerun()
                 with col2:
-                    if st.button(f"🔑 Key Takeaways in {lang}\nExtract insights in {lang}.", key="prompt_takeaways_lang"):
+                    if st.button(f"Key Takeaways in {lang}\nExtract insights in {lang}.", key="prompt_takeaways_lang", icon=":material/key:"):
                         st.session_state.messages.append({
                             "role": "user", 
                             "content": f"What are the 5 most important insights or takeaways from this document? Please write the response in {lang}."
                         })
                         st.rerun()
-                    if st.button(f"🔍 Term definitions in {lang}\nIdentify and translate jargon.", key="prompt_def_lang"):
+                    if st.button(f"Term definitions in {lang}\nIdentify and translate jargon.", key="prompt_def_lang", icon=":material/find_in_page:"):
                         st.session_state.messages.append({
                             "role": "user", 
                             "content": f"Identify and define key terms or acronyms used here. Explain their meanings in {lang}."
@@ -120,7 +120,7 @@ def render_multilingual_rag_page(active_api_key, selected_model, active_groq_key
                         
                         # Show sources if assistant has them
                         if message["role"] == "assistant" and "sources" in message and message["sources"]:
-                            with st.expander("🔍 References (Original Source Passages)"):
+                            with st.expander("References (Original Source Passages)", icon=":material/find_in_page:"):
                                 for idx, src in enumerate(message["sources"]):
                                     page_text = ""
                                     if isinstance(src, dict):
@@ -132,7 +132,7 @@ def render_multilingual_rag_page(active_api_key, selected_model, active_groq_key
                                     else:
                                         content = src
                                         
-                                    badge_html = f'<span class="clean-source-tag">📄 {page_text}</span>' if page_text else ""
+                                    badge_html = f'<span class="clean-source-tag"><i class="fa-solid fa-file-invoice" style="margin-right: 5px;"></i> {page_text}</span>' if page_text else ""
                                     
                                     st.markdown(textwrap.dedent(f"""
                                     <div class="clean-source-box">
@@ -171,7 +171,7 @@ def render_multilingual_rag_page(active_api_key, selected_model, active_groq_key
                             st.markdown(response["answer"])
                             
                             if "context" in response and response["context"]:
-                                with st.expander("🔍 References (Original Source Passages)"):
+                                with st.expander("References (Original Source Passages)", icon=":material/find_in_page:"):
                                     for idx, src in enumerate(response["context"]):
                                         page_text = ""
                                         if isinstance(src, dict):
@@ -183,7 +183,7 @@ def render_multilingual_rag_page(active_api_key, selected_model, active_groq_key
                                         else:
                                             content = src
                                             
-                                        badge_html = f'<span class="clean-source-tag">📄 {page_text}</span>' if page_text else ""
+                                        badge_html = f'<span class="clean-source-tag"><i class="fa-solid fa-file-invoice" style="margin-right: 5px;"></i> {page_text}</span>' if page_text else ""
                                         
                                         st.markdown(textwrap.dedent(f"""
                                         <div class="clean-source-box">
@@ -211,7 +211,7 @@ def render_multilingual_rag_page(active_api_key, selected_model, active_groq_key
 
     # ==================== TAB B: DIRECT TEXT TRANSLATOR (GROQ) ====================
     with tab_direct:
-        st.markdown("<h3 style='font-size: 1.15rem; font-weight: 600; color: #ffffff; margin-bottom: 5px; margin-top: 10px;'>⚡ Fast Translation Engine</h3>", unsafe_allow_html=True)
+        st.markdown("<h3 style='font-size: 1.15rem; font-weight: 600; color: #ffffff; margin-bottom: 5px; margin-top: 10px;'><i class=\"fa-solid fa-bolt\" style=\"margin-right: 8px; color: #fbbf24;\"></i> Fast Translation Engine</h3>", unsafe_allow_html=True)
         st.markdown("<p style='color: #64748b; font-size: 0.8rem; margin-bottom: 20px;'>Type any phrase, sentence, or paragraph to translate it directly using high-performance models on Groq.</p>", unsafe_allow_html=True)
         
         # 1. Inputs
@@ -253,9 +253,9 @@ def render_multilingual_rag_page(active_api_key, selected_model, active_groq_key
             
         col_run_t, col_clear_t = st.columns([4, 1])
         with col_run_t:
-            run_trans_btn = st.button("🚀 Translate Text", key="run_direct_translation", use_container_width=True)
+            run_trans_btn = st.button("Translate Text", key="run_direct_translation", use_container_width=True, icon=":material/translate:")
         with col_clear_t:
-            clear_trans_btn = st.button("🧹 Clear Output", key="clear_direct_translation", use_container_width=True)
+            clear_trans_btn = st.button("Clear Output", key="clear_direct_translation", use_container_width=True, icon=":material/delete:")
             
         # Session state for direct translation history
         if "direct_translation_result" not in st.session_state or clear_trans_btn:
@@ -263,9 +263,9 @@ def render_multilingual_rag_page(active_api_key, selected_model, active_groq_key
             
         if run_trans_btn:
             if not direct_input.strip():
-                st.error("❌ Please provide text to translate.")
+                st.error("Please provide text to translate.", icon=":material/error:")
             elif not active_groq_key:
-                st.error("❌ Groq API Key required. Please configure it in the 'System Configurations' expander in the sidebar.")
+                st.error("Groq API Key required. Please configure it in the 'System Configurations' expander in the sidebar.", icon=":material/error:")
             else:
                 with st.spinner("Processing Groq API request..."):
                     try:
@@ -301,9 +301,9 @@ def render_multilingual_rag_page(active_api_key, selected_model, active_groq_key
                             "latency": f"{(t_end - t_start) * 1000:.0f} ms",
                             "chars": len(direct_input)
                         }
-                        st.toast("Translation completed successfully!", icon="✅")
+                        st.toast("Translation completed successfully!", icon=":material/check_circle:")
                     except Exception as e:
-                        st.error(f"❌ Groq translation failed: {str(e)}")
+                        st.error(f"Groq translation failed: {str(e)}", icon=":material/error:")
                         
         # 3. Output Panel
         if st.session_state.direct_translation_result:
@@ -313,12 +313,12 @@ def render_multilingual_rag_page(active_api_key, selected_model, active_groq_key
             <div style="background-color: rgba(99, 102, 241, 0.05); padding: 22px; border-radius: 14px; border: 1px solid rgba(99, 102, 241, 0.15); margin-bottom: 20px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 8px; margin-bottom: 12px;">
                     <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: #818cf8; letter-spacing: 0.05em;">Translation Output ({res['lang']})</span>
-                    <span style="font-size: 0.7rem; color: #64748b; font-weight: 500;">⚡ Groq Speed: {res['latency']}</span>
+                    <span style="font-size: 0.7rem; color: #64748b; font-weight: 500;"><i class="fa-solid fa-bolt" style="color: #fbbf24; margin-right: 5px;"></i> Groq Speed: {res['latency']}</span>
                 </div>
                 <p style="font-size: 1.25rem; font-weight: 600; color: #ffffff; line-height: 1.5; margin: 0; margin-bottom: 15px;">{res['output']}</p>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <span class="clean-source-tag" style="font-size: 0.65rem;">🤖 Model: {res['model']}</span>
-                    <span class="clean-source-tag" style="font-size: 0.65rem;">📏 Length: {res['chars']} characters</span>
+                    <span class="clean-source-tag" style="font-size: 0.65rem;"><i class="fa-solid fa-robot" style="margin-right: 5px;"></i> Model: {res['model']}</span>
+                    <span class="clean-source-tag" style="font-size: 0.65rem;"><i class="fa-solid fa-ruler-horizontal" style="margin-right: 5px;"></i> Length: {res['chars']} characters</span>
                 </div>
             </div>
             """, unsafe_allow_html=True)

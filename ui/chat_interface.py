@@ -18,7 +18,7 @@ def render_chat_interface(active_api_key, selected_model):
     if len(st.session_state.messages) == 0:
         st.markdown(f"""
 <div class="centered-welcome" style="margin-top: 80px;">
-    <div style="font-size: 2.5rem; margin-bottom: 12px;">📊</div>
+    <div style="font-size: 2.5rem; margin-bottom: 12px; color: #818cf8;"><i class="fa-solid fa-chart-simple"></i></div>
     <h2 class="welcome-title" style="font-size: 1.9rem;">{st.session_state.doc_info['name']}</h2>
     <p class="welcome-subtitle" style="font-size: 0.95rem;">Document is processed and ready. Select a starting point below or write a query.</p>
 </div>
@@ -27,17 +27,17 @@ def render_chat_interface(active_api_key, selected_model):
         st.markdown('<div class="prompt-grid">', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("📝 Summarize Document\nGet a quick 3-paragraph executive summary.", key="prompt_sum"):
+            if st.button("Summarize Document\nGet a quick 3-paragraph executive summary.", key="prompt_sum", icon=":material/description:"):
                 st.session_state.messages.append({"role": "user", "content": "Can you summarize the main contents of this document in 3 paragraphs?"})
                 st.rerun()
-            if st.button("❓ Draft FAQ List\nGenerate frequently asked questions.", key="prompt_faq"):
+            if st.button("Draft FAQ List\nGenerate frequently asked questions.", key="prompt_faq", icon=":material/help:"):
                 st.session_state.messages.append({"role": "user", "content": "Generate a list of 5 frequently asked questions and answers based on this document."})
                 st.rerun()
         with col2:
-            if st.button("🔑 Key Takeaways\nExtract the top 5 insights.", key="prompt_takeaways"):
+            if st.button("Key Takeaways\nExtract the top 5 insights.", key="prompt_takeaways", icon=":material/key:"):
                 st.session_state.messages.append({"role": "user", "content": "What are the 5 most important insights or takeaways from this document?"})
                 st.rerun()
-            if st.button("🔍 Term Definitions\nDefine key terms and acronyms.", key="prompt_def"):
+            if st.button("Term Definitions\nDefine key terms and acronyms.", key="prompt_def", icon=":material/find_in_page:"):
                 st.session_state.messages.append({"role": "user", "content": "Identify and define any key terms, jargon, or acronyms used in this document."})
                 st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
@@ -51,7 +51,7 @@ def render_chat_interface(active_api_key, selected_model):
                 
                 # Show sources if assistant has them
                 if message["role"] == "assistant" and "sources" in message and message["sources"]:
-                    with st.expander("🔍 References"):
+                    with st.expander("References", icon=":material/find_in_page:"):
                         for idx, src in enumerate(message["sources"]):
                             page_text = ""
                             if isinstance(src, dict):
@@ -63,7 +63,7 @@ def render_chat_interface(active_api_key, selected_model):
                             else:
                                 content = src
                                 
-                            badge_html = f'<span class="clean-source-tag">📄 {page_text}</span>' if page_text else ""
+                            badge_html = f'<span class="clean-source-tag"><i class="fa-solid fa-file-invoice" style="margin-right: 5px;"></i> {page_text}</span>' if page_text else ""
                             
                             st.markdown(textwrap.dedent(f"""
                             <div class="clean-source-box">
@@ -98,7 +98,7 @@ def render_chat_interface(active_api_key, selected_model):
                     st.markdown(response["answer"])
                     
                     if "context" in response and response["context"]:
-                        with st.expander("🔍 References"):
+                        with st.expander("References", icon=":material/find_in_page:"):
                             for idx, src in enumerate(response["context"]):
                                 page_text = ""
                                 if isinstance(src, dict):
@@ -110,7 +110,7 @@ def render_chat_interface(active_api_key, selected_model):
                                 else:
                                     content = src
                                     
-                                badge_html = f'<span class="clean-source-tag">📄 {page_text}</span>' if page_text else ""
+                                badge_html = f'<span class="clean-source-tag"><i class="fa-solid fa-file-invoice" style="margin-right: 5px;"></i> {page_text}</span>' if page_text else ""
                                 
                                 st.markdown(textwrap.dedent(f"""
                                 <div class="clean-source-box">
