@@ -4,7 +4,9 @@ import hashlib
 import os
 import base64
 
-DB_FILE = "users.db"
+# Use absolute path to ensure DB is saved in the app's parent directory, independent of working directory
+DB_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DB_FILE = os.path.join(DB_DIR, "users.db")
 
 def hash_password(password, salt="documind_salt_123"):
     """Hash password using SHA-256 and salt."""
@@ -247,6 +249,11 @@ def render_auth_page():
                     st.markdown("<h2 style='font-size: 2.1rem; font-weight: 700; margin-top: 0px; margin-bottom: 2px;'>Log in</h2>", unsafe_allow_html=True)
                     st.markdown("<p style='color: #6b7280; font-size: 0.85rem; margin-bottom: 20px;'>Open your saved uploads, summaries, and 22 NLP experiments from one unified workspace.</p>", unsafe_allow_html=True)
                     
+                    # Display signup success message if redirecting from signup
+                    if "signup_success" in st.session_state and st.session_state.signup_success:
+                        st.success(st.session_state.signup_success)
+                        del st.session_state.signup_success
+                        
                     login_username = st.text_input("USERNAME / EMAIL", key="login_user_input", placeholder="you@example.com").strip()
                     login_password = st.text_input("PASSWORD", type="password", key="login_pass_input", placeholder="Enter your password")
                     
@@ -285,7 +292,7 @@ def render_auth_page():
                         else:
                             success, message = signup_user(signup_username, signup_password)
                             if success:
-                                st.success(message)
+                                st.session_state.signup_success = message
                                 st.session_state.auth_mode = "login"
                                 st.rerun()
                             else:
