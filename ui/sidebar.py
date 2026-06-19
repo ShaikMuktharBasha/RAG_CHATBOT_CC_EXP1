@@ -26,10 +26,11 @@ def render_sidebar():
         st.markdown("<h2 style='font-size: 1.35rem; font-weight: 700; color: #ffffff; margin-bottom: 4px; margin-top: 10px;'><i class=\"fa-solid fa-graduation-cap\" style=\"margin-right: 8px; color: #818cf8;\"></i> Laboratory Works</h2>", unsafe_allow_html=True)
         st.markdown("<p style='color: #64748b; font-size: 0.8rem; margin-bottom: 20px;'>Select an experiment to open its dedicated workspace.</p>", unsafe_allow_html=True)
         
-        # Experiment names map (only describe Exp 1 and 2, others remain blank)
+        # Experiment names map
         EXP_NAMES = {
             1: "Employee Handbook (RAG)",
-            2: "Multilingual RAG Translator"
+            2: "Multilingual RAG Translator",
+            3: "Call Center Assistant"
         }
         
         # 2. Render flat experiment selector buttons

@@ -115,6 +115,9 @@ else:
             render_chat_interface(active_api_key, selected_model)
     elif st.session_state.selected_experiment == 2:
         render_multilingual_rag_page(active_api_key, selected_model, active_groq_key)
+    elif st.session_state.selected_experiment == 3:
+        from ui.call_center_assistant import render_call_center_assistant
+        render_call_center_assistant(active_api_key, selected_model)
     else:
         render_sandbox_playground(st.session_state.selected_experiment, active_api_key, selected_model)
 
