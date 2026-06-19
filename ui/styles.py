@@ -603,4 +603,4 @@ def apply_custom_styles():
         margin-bottom: 20px !important;
     }
 </style>
-""", unsafe_allow_html=True)
+""")
