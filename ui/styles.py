@@ -1,11 +1,11 @@
 import streamlit as st
 
 def apply_custom_styles():
-    """Injects high-end CSS into Streamlit for a premium ChatGPT-style UI."""
+    """Injects high-end CSS into Streamlit for a clean, decent, and professional corporate UI."""
     st.html("""
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-    /* Premium Google Font imports - loaded as the first rule */
+    /* Premium Google Font imports */
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
     
     html, body, [class*="css"], .stApp {
@@ -16,23 +16,23 @@ def apply_custom_styles():
         font-family: 'Outfit', sans-serif !important;
     }
     
-    /* 1. Global Page Background - Forces Dark Mode background regardless of Streamlit theme settings */
+    /* 1. Global Page Background - Refined Dark Slate */
     .stApp, div.stApp, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
-        background-color: #030712 !important;
+        background-color: #0b0f19 !important;
         background-image: 
-            radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
-            radial-gradient(at 100% 100%, rgba(167, 139, 250, 0.07) 0px, transparent 50%) !important;
-        color: #f3f4f6 !important;
+            radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
+            radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.03) 0px, transparent 50%) !important;
+        color: #e2e8f0 !important;
     }
     
     /* 2. Global Text Color Overrides for Visibility */
     h1, h2, h3, h4, h5, h6, .main-title, .welcome-title, p, span, label, li, div {
-        color: #f3f4f6 !important;
+        color: #e2e8f0 !important;
     }
     
     /* Secondary text elements */
     .subtitle, .welcome-subtitle, .stat-label, .subtitle strong {
-        color: #9ca3af !important;
+        color: #94a3b8 !important;
     }
 
     /* 3. Elegant Dark Sidebar Container */
@@ -41,14 +41,14 @@ def apply_custom_styles():
     section[data-testid="stSidebar"],
     .stSidebar,
     [data-testid="stSidebarContent"] {
-        background-color: #080c14 !important;
+        background-color: #0f172a !important;
         background-image: none !important;
-        border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
-        color: #e2e8f0 !important;
+        border-right: 1px solid rgba(148, 163, 184, 0.08) !important;
+        color: #cbd5e1 !important;
     }
     
     [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] {
-        color: #e2e8f0 !important;
+        color: #cbd5e1 !important;
     }
 
     /* Input box and Select dropdown wrappers in Sidebar */
@@ -56,9 +56,9 @@ def apply_custom_styles():
     [data-testid="stSidebar"] div[data-baseweb="select"],
     [data-testid="stSidebar"] input,
     [data-testid="stSidebar"] select {
-        background-color: rgba(17, 24, 39, 0.6) !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 8px !important;
+        background-color: rgba(15, 23, 42, 0.6) !important;
+        border: 1px solid rgba(148, 163, 184, 0.1) !important;
+        border-radius: 6px !important;
         color: #ffffff !important;
     }
     
@@ -67,11 +67,11 @@ def apply_custom_styles():
         padding-top: 15px;
         padding-bottom: 20px;
         margin-bottom: 25px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(148, 163, 184, 0.08);
     }
     
     .main-title {
-        background: linear-gradient(135deg, #a5b4fc 0%, #c084fc 50%, #f472b6 100%) !important;
+        background: linear-gradient(135deg, #ffffff 0%, #93c5fd 50%, #60a5fa 100%) !important;
         -webkit-background-clip: text !important;
         -webkit-text-fill-color: transparent !important;
         font-size: 2.4rem;
@@ -85,7 +85,7 @@ def apply_custom_styles():
         max-width: 750px;
         margin: 60px auto 30px auto;
         text-align: center;
-        animation: fadeInUp 0.6s ease-out;
+        animation: fadeInUp 0.5s ease-out;
     }
     
     .welcome-title {
@@ -94,49 +94,50 @@ def apply_custom_styles():
         color: #ffffff !important;
         margin-bottom: 12px;
         letter-spacing: -0.03em;
-        background: linear-gradient(120deg, #ffffff 40%, #e2e8f0 100%) !important;
+        background: linear-gradient(120deg, #ffffff 40%, #cbd5e1 100%) !important;
         -webkit-background-clip: text !important;
         -webkit-text-fill-color: transparent !important;
     }
     
     .welcome-subtitle {
-        font-size: 1.1rem;
+        font-size: 1.05rem;
         margin-bottom: 30px;
         font-weight: 300;
         line-height: 1.6;
+        color: #94a3b8 !important;
     }
     
     /* Prompt Suggestions Grid Container */
     .prompt-grid {
         max-width: 750px;
         margin: 20px auto;
-        animation: fadeInUp 0.8s ease-out;
+        animation: fadeInUp 0.6s ease-out;
     }
     
     /* Glassmorphism prompt buttons override */
     .prompt-grid div[data-testid="column"] button {
-        background-color: rgba(17, 24, 39, 0.45) !important;
-        border: 1px solid rgba(255, 255, 255, 0.05) !important;
-        border-radius: 14px !important;
-        padding: 18px 22px !important;
+        background-color: rgba(30, 41, 59, 0.4) !important;
+        border: 1px solid rgba(148, 163, 184, 0.08) !important;
+        border-radius: 10px !important;
+        padding: 14px 18px !important;
         text-align: left !important;
-        min-height: 95px !important;
-        color: #e2e8f0 !important;
+        min-height: 80px !important;
+        color: #cbd5e1 !important;
         font-weight: 500 !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
+        transition: all 0.2s ease !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
         display: block !important;
         white-space: pre-line !important;
-        line-height: 1.5 !important;
+        line-height: 1.4 !important;
         width: 100% !important;
-        backdrop-filter: blur(10px) !important;
+        backdrop-filter: blur(8px) !important;
     }
     
     .prompt-grid div[data-testid="column"] button:hover {
-        background-color: rgba(31, 41, 55, 0.55) !important;
-        border-color: rgba(129, 140, 248, 0.4) !important;
-        transform: translateY(-3px) !important;
-        box-shadow: 0 10px 25px rgba(99, 102, 241, 0.12) !important;
+        background-color: rgba(30, 41, 59, 0.6) !important;
+        border-color: rgba(59, 130, 246, 0.3) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.08) !important;
         color: #ffffff !important;
     }
     
@@ -145,134 +146,133 @@ def apply_custom_styles():
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        background-color: rgba(17, 24, 39, 0.5) !important;
-        border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        background-color: rgba(30, 41, 59, 0.5) !important;
+        border: 1px solid rgba(148, 163, 184, 0.08) !important;
         border-radius: 100px !important;
-        padding: 6px 14px !important;
-        font-size: 0.8rem !important;
+        padding: 4px 12px !important;
+        font-size: 0.75rem !important;
         font-weight: 600 !important;
         margin-bottom: 20px !important;
-        backdrop-filter: blur(8px) !important;
+        backdrop-filter: blur(6px) !important;
     }
     
     .status-dot {
-        width: 8px !important;
-        height: 8px !important;
+        width: 6px !important;
+        height: 6px !important;
         border-radius: 50% !important;
     }
     
     .status-dot.active {
         background-color: #10b981 !important;
-        box-shadow: 0 0 10px #10b981 !important;
+        box-shadow: 0 0 8px #10b981 !important;
         animation: pulseReady 2s infinite !important;
     }
     
     .status-dot.waiting {
         background-color: #f59e0b !important;
-        box-shadow: 0 0 10px #f59e0b !important;
+        box-shadow: 0 0 8px #f59e0b !important;
         animation: pulseWaiting 2s infinite !important;
     }
     
     /* Stats grid container in sidebar */
     .stat-container {
-        background-color: rgba(17, 24, 39, 0.45) !important;
-        border: 1px solid rgba(255, 255, 255, 0.04) !important;
-        border-radius: 10px !important;
-        padding: 12px 14px !important;
-        backdrop-filter: blur(8px) !important;
-        margin-bottom: 10px !important;
-        transition: border-color 0.3s ease !important;
+        background-color: rgba(15, 23, 42, 0.4) !important;
+        border: 1px solid rgba(148, 163, 184, 0.06) !important;
+        border-radius: 8px !important;
+        padding: 10px 12px !important;
+        backdrop-filter: blur(6px) !important;
+        margin-bottom: 8px !important;
+        transition: border-color 0.2s ease !important;
     }
     
     .stat-container:hover {
-        border-color: rgba(255, 255, 255, 0.08) !important;
+        border-color: rgba(148, 163, 184, 0.12) !important;
     }
     
     .stat-value {
-        font-size: 0.9rem !important;
+        font-size: 0.85rem !important;
         font-weight: 600 !important;
-        color: #f1f5f9 !important;
+        color: #e2e8f0 !important;
     }
     
     /* Reference output cards with dynamic borders & tags */
     .clean-source-box {
-        background-color: rgba(17, 24, 39, 0.4) !important;
-        border-left: 3px solid #818cf8 !important;
-        padding: 16px 20px !important;
-        margin: 14px 0 !important;
-        border-radius: 0 10px 10px 0 !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.04) !important;
-        border-right: 1px solid rgba(255, 255, 255, 0.04) !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
-        font-size: 0.9rem !important;
-        line-height: 1.6 !important;
-        color: #d1d5db !important;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
+        background-color: rgba(30, 41, 59, 0.3) !important;
+        border-left: 3px solid #3b82f6 !important;
+        padding: 14px 18px !important;
+        margin: 12px 0 !important;
+        border-radius: 0 8px 8px 0 !important;
+        border-top: 1px solid rgba(148, 163, 184, 0.06) !important;
+        border-right: 1px solid rgba(148, 163, 184, 0.06) !important;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.06) !important;
+        font-size: 0.88rem !important;
+        line-height: 1.55 !important;
+        color: #cbd5e1 !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
     }
     
     .clean-source-header {
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
-        margin-bottom: 10px !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
-        padding-bottom: 6px !important;
+        margin-bottom: 8px !important;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.06) !important;
+        padding-bottom: 4px !important;
     }
-
+ 
     .clean-source-title {
-        font-size: 0.75rem !important;
+        font-size: 0.725rem !important;
         font-weight: 700 !important;
-        color: #818cf8 !important;
+        color: #60a5fa !important;
         text-transform: uppercase !important;
-        letter-spacing: 0.06em !important;
+        letter-spacing: 0.05em !important;
     }
-
+ 
     .clean-source-tag {
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(167, 139, 250, 0.15) 100%) !important;
-        border: 1px solid rgba(129, 140, 248, 0.3) !important;
+        background: rgba(59, 130, 246, 0.1) !important;
+        border: 1px solid rgba(59, 130, 246, 0.2) !important;
         border-radius: 4px !important;
-        padding: 2px 8px !important;
-        font-size: 0.7rem !important;
-        color: #a5b4fc !important;
+        padding: 1px 6px !important;
+        font-size: 0.68rem !important;
+        color: #93c5fd !important;
         font-weight: 600 !important;
     }
     
-    /* Standard Button Customizations */
+    /* Standard Button Customizations - decent slate design */
     div.stButton > button {
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(167, 139, 250, 0.15) 100%) !important;
-        color: #f3f4f6 !important;
-        border: 1px solid rgba(129, 140, 248, 0.2) !important;
-        border-radius: 10px !important;
-        padding: 10px 20px !important;
-        font-size: 0.875rem !important;
+        background: rgba(30, 41, 59, 0.7) !important;
+        color: #cbd5e1 !important;
+        border: 1px solid rgba(148, 163, 184, 0.12) !important;
+        border-radius: 8px !important;
+        padding: 8px 16px !important;
+        font-size: 0.85rem !important;
         font-weight: 600 !important;
         width: 100% !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        transition: all 0.2s ease !important;
         backdrop-filter: blur(4px) !important;
     }
     
     div.stButton > button:hover {
-        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
-        border-color: transparent !important;
+        background: #3b82f6 !important;
+        border-color: #3b82f6 !important;
         color: #ffffff !important;
-        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.25) !important;
-        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.18) !important;
+        transform: translateY(-1px) !important;
     }
     
-    /* 4. File Uploader Dropzone and Layout Custom styling (High Specificity) */
+    /* 4. File Uploader Dropzone and Layout Custom styling */
     div.stApp section[role="presentation"],
     div.stApp .st-key-main_uploader section,
     div.stApp .st-key-sidebar_uploader section,
     div.stApp div[data-testid="stFileUploader"] section,
     div.stApp section[data-testid="stFileUploader"],
-    div.stApp .stFileUploader section,
-    div.stApp .e3v525e0 {
-        background-color: rgba(17, 24, 39, 0.5) !important;
-        border: 1.5px dashed rgba(129, 140, 248, 0.25) !important;
-        border-radius: 14px !important;
-        padding: 24px !important;
-        backdrop-filter: blur(8px) !important;
-        transition: all 0.3s ease !important;
+    div.stApp .stFileUploader section {
+        background-color: rgba(30, 41, 59, 0.35) !important;
+        border: 1.5px dashed rgba(148, 163, 184, 0.15) !important;
+        border-radius: 10px !important;
+        padding: 20px !important;
+        backdrop-filter: blur(6px) !important;
+        transition: all 0.2s ease !important;
     }
     
     div.stApp section[role="presentation"]:hover,
@@ -280,34 +280,31 @@ def apply_custom_styles():
     div.stApp .st-key-sidebar_uploader section:hover,
     div.stApp div[data-testid="stFileUploader"] section:hover,
     div.stApp section[data-testid="stFileUploader"]:hover,
-    div.stApp .stFileUploader section:hover,
-    div.stApp .e3v525e0:hover {
-        border-color: rgba(129, 140, 248, 0.5) !important;
-        background-color: rgba(17, 24, 39, 0.65) !important;
-        box-shadow: 0 4px 25px rgba(99, 102, 241, 0.05) !important;
+    div.stApp .stFileUploader section:hover {
+        border-color: rgba(59, 130, 246, 0.4) !important;
+        background-color: rgba(30, 41, 59, 0.5) !important;
     }
     
     div.stApp [data-testid="stFileUploaderDropzoneInstructions"] {
-        color: #e2e8f0 !important;
+        color: #cbd5e1 !important;
     }
     
-    /* 5. Custom Upload Button inside Uploader - forces gradient and high visibility */
+    /* 5. Custom Upload Button inside Uploader - forces clean styling */
     div.stApp section[role="presentation"] button,
     div.stApp .st-key-main_uploader button,
     div.stApp .st-key-sidebar_uploader button,
     div.stApp div[data-testid="stFileUploader"] button,
     div.stApp section[data-testid="stFileUploader"] button,
     div.stApp .stFileUploader button,
-    div.stApp [data-testid="stBaseButton-secondary"],
-    div.stApp .e12tamyi2 {
-        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+    div.stApp [data-testid="stBaseButton-secondary"] {
+        background: #3b82f6 !important;
         color: #ffffff !important;
         border: none !important;
-        border-radius: 10px !important;
-        padding: 10px 26px !important;
-        font-weight: 700 !important;
-        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3) !important;
-        transition: all 0.3s ease !important;
+        border-radius: 8px !important;
+        padding: 8px 18px !important;
+        font-weight: 600 !important;
+        box-shadow: 0 4px 10px rgba(59, 130, 246, 0.15) !important;
+        transition: all 0.2s ease !important;
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -319,50 +316,44 @@ def apply_custom_styles():
     div.stApp div[data-testid="stFileUploader"] button:hover,
     div.stApp section[data-testid="stFileUploader"] button:hover,
     div.stApp .stFileUploader button:hover,
-    div.stApp [data-testid="stBaseButton-secondary"]:hover,
-    div.stApp .e12tamyi2:hover {
-        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
-        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4) !important;
-        transform: translateY(-2px) !important;
+    div.stApp [data-testid="stBaseButton-secondary"]:hover {
+        background: #2563eb !important;
+        box-shadow: 0 6px 14px rgba(59, 130, 246, 0.25) !important;
+        transform: translateY(-1px) !important;
     }
-
-    /* wildcard selector to force all button text (including Streamlit nested tags) to be white */
+ 
     div.stApp section[role="presentation"] button *,
     div.stApp .st-key-main_uploader button *,
     div.stApp .st-key-sidebar_uploader button *,
     div.stApp div[data-testid="stFileUploader"] button *,
     div.stApp section[data-testid="stFileUploader"] button *,
-    div.stApp [data-testid="stBaseButton-secondary"] *,
-    div.stApp .e12tamyi2 * {
+    div.stApp [data-testid="stBaseButton-secondary"] * {
         color: #ffffff !important;
-        font-weight: 700 !important;
+        font-weight: 600 !important;
     }
-
-
     
     /* 6. Chat Input container styling */
     [data-testid="stChatInput"] {
-        border-radius: 14px !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        background-color: rgba(11, 15, 26, 0.85) !important;
-        backdrop-filter: blur(16px) !important;
-        box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.3) !important;
-        transition: all 0.3s ease !important;
+        border-radius: 10px !important;
+        border: 1px solid rgba(148, 163, 184, 0.12) !important;
+        background-color: rgba(15, 23, 42, 0.8) !important;
+        backdrop-filter: blur(12px) !important;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15) !important;
+        transition: all 0.2s ease !important;
     }
     
     [data-testid="stChatInput"]:focus-within {
-        border-color: rgba(129, 140, 248, 0.4) !important;
-        box-shadow: 0 0 15px rgba(99, 102, 241, 0.15) !important;
+        border-color: rgba(59, 130, 246, 0.3) !important;
     }
     
     /* Expander override */
     .streamlit-expanderHeader {
-        background-color: rgba(17, 24, 39, 0.3) !important;
-        border: 1px solid rgba(255, 255, 255, 0.05) !important;
-        border-radius: 8px !important;
-        color: #9ca3af !important;
-        font-size: 0.85rem !important;
-        padding: 8px 12px !important;
+        background-color: rgba(30, 41, 59, 0.2) !important;
+        border: 1px solid rgba(148, 163, 184, 0.06) !important;
+        border-radius: 6px !important;
+        color: #94a3b8 !important;
+        font-size: 0.825rem !important;
+        padding: 6px 10px !important;
     }
     
     .streamlit-expanderContent {
@@ -372,28 +363,28 @@ def apply_custom_styles():
     
     /* Alert styling overrides */
     div[data-testid="stNotification"] {
-        background-color: rgba(17, 24, 39, 0.65) !important;
-        border: 1px solid rgba(255, 255, 255, 0.05) !important;
-        border-radius: 12px !important;
-        backdrop-filter: blur(8px) !important;
+        background-color: rgba(30, 41, 59, 0.5) !important;
+        border: 1px solid rgba(148, 163, 184, 0.08) !important;
+        border-radius: 10px !important;
+        backdrop-filter: blur(6px) !important;
     }
     
     /* Custom chat bubbles overrides for ChatGPT aesthetic */
     div[data-testid="stChatMessage"] {
-        background-color: rgba(17, 24, 39, 0.45) !important;
-        border: 1px solid rgba(255, 255, 255, 0.04) !important;
-        border-radius: 16px !important;
-        padding: 20px 24px !important;
-        margin-bottom: 20px !important;
+        background-color: rgba(30, 41, 59, 0.35) !important;
+        border: 1px solid rgba(148, 163, 184, 0.06) !important;
+        border-radius: 12px !important;
+        padding: 16px 20px !important;
+        margin-bottom: 15px !important;
         backdrop-filter: blur(12px) !important;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.05) !important;
-        animation: slideInUp 0.4s ease-out;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;
+        animation: slideInUp 0.3s ease-out;
     }
     
     div[data-testid="stChatMessage"] p {
-        color: #e2e8f0 !important;
-        font-size: 0.98rem !important;
-        line-height: 1.65 !important;
+        color: #cbd5e1 !important;
+        font-size: 0.95rem !important;
+        line-height: 1.6 !important;
     }
     
     /* Scrollbars design */
@@ -402,29 +393,18 @@ def apply_custom_styles():
         height: 6px;
     }
     ::-webkit-scrollbar-track {
-        background: #030712;
+        background: #0b0f19;
     }
     ::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.08);
+        background: rgba(148, 163, 184, 0.15);
         border-radius: 10px;
     }
     ::-webkit-scrollbar-thumb:hover {
-        background: rgba(129, 140, 248, 0.3);
+        background: rgba(59, 130, 246, 0.3);
     }
     
     /* Keyframe Animations */
     @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    @keyframes slideInUp {
         from {
             opacity: 0;
             transform: translateY(15px);
@@ -435,12 +415,23 @@ def apply_custom_styles():
         }
     }
     
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
     @keyframes pulseReady {
         0% {
-            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
         }
         70% {
-            box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
         }
         100% {
             box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
@@ -449,10 +440,10 @@ def apply_custom_styles():
     
     @keyframes pulseWaiting {
         0% {
-            box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+            box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.5);
         }
         70% {
-            box-shadow: 0 0 0 8px rgba(245, 158, 11, 0);
+            box-shadow: 0 0 0 6px rgba(245, 158, 11, 0);
         }
         100% {
             box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
@@ -461,15 +452,15 @@ def apply_custom_styles():
     
     /* 7. Sidebar Experiment Navigation Custom styling */
     [data-testid="stSidebar"] div.stButton > button {
-        background: rgba(255, 255, 255, 0.02) !important;
-        border: 1px solid rgba(255, 255, 255, 0.04) !important;
-        color: #9ca3af !important;
+        background: transparent !important;
+        border: 1px solid transparent !important;
+        color: #94a3b8 !important;
         text-align: left !important;
-        padding: 8px 14px !important;
-        font-size: 0.825rem !important;
+        padding: 8px 12px !important;
+        font-size: 0.85rem !important;
         font-weight: 500 !important;
-        border-radius: 8px !important;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        border-radius: 6px !important;
+        transition: all 0.15s ease !important;
         margin-bottom: 2px !important;
         display: flex !important;
         align-items: center !important;
@@ -477,30 +468,29 @@ def apply_custom_styles():
     }
     
     [data-testid="stSidebar"] div.stButton > button:hover {
-        background: rgba(99, 102, 241, 0.08) !important;
-        border-color: rgba(129, 140, 248, 0.2) !important;
-        color: #ffffff !important;
-        transform: translateX(4px) !important;
+        background: rgba(148, 163, 184, 0.06) !important;
+        color: #f1f5f9 !important;
+        transform: translateX(2px) !important;
         box-shadow: none !important;
     }
     
     /* Active button indicator */
     [data-testid="stSidebar"] div.stButton > button:active,
     [data-testid="stSidebar"] div.stButton > button:focus {
-        background: linear-gradient(90deg, rgba(99, 102, 241, 0.15) 0%, rgba(167, 139, 250, 0.05) 100%) !important;
-        border-left: 3px solid #818cf8 !important;
-        color: #ffffff !important;
+        background: rgba(59, 130, 246, 0.1) !important;
+        border-left: 3px solid #3b82f6 !important;
+        color: #3b82f6 !important;
     }
-
+ 
     /* 8. Experiment Dashboard Cards & Badges */
     .exp-header-card {
-        background: rgba(17, 24, 39, 0.45) !important;
-        border: 1px solid rgba(255, 255, 255, 0.06) !important;
-        border-radius: 16px !important;
-        padding: 24px 30px !important;
-        margin-bottom: 25px !important;
-        backdrop-filter: blur(12px) !important;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+        background: rgba(30, 41, 59, 0.4) !important;
+        border: 1px solid rgba(148, 163, 184, 0.08) !important;
+        border-radius: 12px !important;
+        padding: 20px 24px !important;
+        margin-bottom: 20px !important;
+        backdrop-filter: blur(10px) !important;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1) !important;
         position: relative;
         overflow: hidden;
     }
@@ -512,87 +502,86 @@ def apply_custom_styles():
         left: 0;
         width: 100%;
         height: 3px;
-        background: linear-gradient(90deg, #6366f1, #c084fc, #f472b6);
+        background: linear-gradient(90deg, #3b82f6, #60a5fa);
     }
     
     .exp-title {
-        font-size: 2.2rem !important;
+        font-size: 2rem !important;
         font-weight: 800 !important;
-        margin-bottom: 8px !important;
-        background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%) !important;
+        margin-bottom: 6px !important;
+        background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%) !important;
         -webkit-background-clip: text !important;
         -webkit-text-fill-color: transparent !important;
     }
     
     .exp-meta-container {
         display: flex;
-        gap: 10px;
-        margin-bottom: 15px;
+        gap: 8px;
+        margin-bottom: 12px;
         flex-wrap: wrap;
     }
     
     .exp-badge {
-        font-size: 0.725rem !important;
+        font-size: 0.7rem !important;
         font-weight: 600 !important;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
-        padding: 4px 10px !important;
+        letter-spacing: 0.04em;
+        padding: 3px 8px !important;
         border-radius: 100px !important;
         display: inline-flex;
         align-items: center;
     }
     
     .exp-badge.category {
-        background-color: rgba(99, 102, 241, 0.12) !important;
-        border: 1px solid rgba(99, 102, 241, 0.25) !important;
-        color: #a5b4fc !important;
+        background-color: rgba(59, 130, 246, 0.1) !important;
+        border: 1px solid rgba(59, 130, 246, 0.2) !important;
+        color: #60a5fa !important;
     }
     
     .exp-badge.status-ready {
-        background-color: rgba(16, 185, 129, 0.12) !important;
-        border: 1px solid rgba(16, 185, 129, 0.25) !important;
+        background-color: rgba(16, 185, 129, 0.1) !important;
+        border: 1px solid rgba(16, 185, 129, 0.2) !important;
         color: #34d399 !important;
     }
     
     .exp-badge.status-template {
-        background-color: rgba(245, 158, 11, 0.12) !important;
-        border: 1px solid rgba(245, 158, 11, 0.25) !important;
+        background-color: rgba(245, 158, 11, 0.1) !important;
+        border: 1px solid rgba(245, 158, 11, 0.2) !important;
         color: #fbbf24 !important;
     }
     
     .learning-objectives-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 14px;
-        margin: 20px 0;
+        gap: 12px;
+        margin: 16px 0;
     }
     
     .objective-card {
-        background: rgba(255, 255, 255, 0.02) !important;
-        border: 1px solid rgba(255, 255, 255, 0.04) !important;
-        border-radius: 12px !important;
-        padding: 16px 20px !important;
-        transition: all 0.3s ease !important;
+        background: rgba(30, 41, 59, 0.2) !important;
+        border: 1px solid rgba(148, 163, 184, 0.06) !important;
+        border-radius: 10px !important;
+        padding: 12px 16px !important;
+        transition: all 0.2s ease !important;
         display: flex;
-        gap: 12px;
+        gap: 10px;
         align-items: flex-start;
     }
     
     .objective-card:hover {
-        border-color: rgba(129, 140, 248, 0.2) !important;
-        background: rgba(255, 255, 255, 0.03) !important;
-        transform: translateY(-2px);
+        border-color: rgba(59, 130, 246, 0.2) !important;
+        background: rgba(30, 41, 59, 0.3) !important;
     }
     
     .objective-number {
         font-family: 'Outfit', sans-serif !important;
-        font-size: 1.1rem !important;
+        font-size: 1rem !important;
         font-weight: 700 !important;
-        color: #818cf8 !important;
-        background: rgba(99, 102, 241, 0.1) !important;
+        color: #3b82f6 !important;
+        background: rgba(59, 130, 246, 0.1) !important;
         border-radius: 50% !important;
-        width: 26px !important;
-        height: 26px !important;
+        width: 24px !important;
+        height: 24px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -600,18 +589,18 @@ def apply_custom_styles():
     }
     
     .objective-text {
-        font-size: 0.85rem !important;
-        color: #d1d5db !important;
-        line-height: 1.4 !important;
+        font-size: 0.825rem !important;
+        color: #cbd5e1 !important;
+        line-height: 1.35 !important;
     }
     
     /* Playground Panel Layouts */
     .playground-section {
-        background: rgba(17, 24, 39, 0.35) !important;
-        border: 1px solid rgba(255, 255, 255, 0.05) !important;
-        border-radius: 14px !important;
-        padding: 24px !important;
-        margin-bottom: 25px !important;
+        background: rgba(30, 41, 59, 0.25) !important;
+        border: 1px solid rgba(148, 163, 184, 0.06) !important;
+        border-radius: 12px !important;
+        padding: 20px !important;
+        margin-bottom: 20px !important;
     }
 </style>
-""")
+""", unsafe_allow_html=True)

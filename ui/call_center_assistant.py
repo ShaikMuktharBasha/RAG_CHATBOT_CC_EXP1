@@ -7,30 +7,30 @@ def render_call_center_assistant(active_api_key, selected_model):
     st.markdown("""
     <style>
         .cc-kpi-card {
-            background: rgba(17, 24, 39, 0.45);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(30, 41, 59, 0.45);
+            border: 1px solid rgba(148, 163, 184, 0.08);
             border-radius: 12px;
-            padding: 18px;
+            padding: 16px;
             text-align: center;
             backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, border-color 0.2s ease;
         }
         .cc-kpi-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(129, 140, 248, 0.2);
+            transform: translateY(-1px);
+            border-color: rgba(59, 130, 246, 0.2);
         }
         .cc-kpi-val {
             font-size: 1.8rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #a5b4fc, #c084fc);
+            background: linear-gradient(135deg, #ffffff, #60a5fa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 2px;
         }
         .cc-kpi-lbl {
-            font-size: 0.75rem;
-            color: #9ca3af;
+            font-size: 0.725rem;
+            color: #94a3b8;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -42,9 +42,9 @@ def render_call_center_assistant(active_api_key, selected_model):
             max-height: 420px;
             overflow-y: auto;
             padding: 10px;
-            background: rgba(11, 15, 26, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.35);
+            border: 1px solid rgba(148, 163, 184, 0.06);
+            border-radius: 10px;
             margin-bottom: 15px;
         }
         .bubble {
@@ -53,37 +53,37 @@ def render_call_center_assistant(active_api_key, selected_model):
             border-radius: 12px;
             font-size: 0.88rem;
             line-height: 1.45;
-            color: #e2e8f0;
+            color: #cbd5e1;
             position: relative;
         }
         .bubble.customer {
             align-self: flex-start;
-            background-color: rgba(55, 65, 81, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background-color: rgba(30, 41, 59, 0.45);
+            border: 1px solid rgba(148, 163, 184, 0.08);
             border-bottom-left-radius: 2px;
         }
         .bubble.agent {
             align-self: flex-end;
-            background-color: rgba(99, 102, 241, 0.15);
-            border: 1px solid rgba(129, 140, 248, 0.2);
+            background-color: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
             border-bottom-right-radius: 2px;
         }
         .bubble-speaker {
             font-size: 0.7rem;
             font-weight: 700;
             margin-bottom: 3px;
-            color: #a5b4fc;
+            color: #60a5fa;
         }
         .bubble.customer .bubble-speaker {
-            color: #cbd5e1;
+            color: #94a3b8;
         }
         .nba-card {
-            background: rgba(17, 24, 39, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 15px;
+            background: rgba(30, 41, 59, 0.35);
+            border: 1px solid rgba(148, 163, 184, 0.06);
+            border-radius: 10px;
+            padding: 14px;
             margin-bottom: 12px;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
         }
         .nba-card.approved {
             border-color: rgba(16, 185, 129, 0.3);
@@ -93,36 +93,36 @@ def render_call_center_assistant(active_api_key, selected_model):
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .nba-title {
-            font-size: 0.95rem;
+            font-size: 0.925rem;
             font-weight: 700;
             color: #ffffff;
         }
         .nba-confidence {
-            font-size: 0.7rem;
-            background-color: rgba(129, 140, 248, 0.15);
-            color: #a5b4fc;
+            font-size: 0.68rem;
+            background-color: rgba(59, 130, 246, 0.12);
+            color: #60a5fa;
             padding: 2px 6px;
             border-radius: 100px;
             font-weight: 600;
         }
         .nba-reason {
-            font-size: 0.8rem;
-            color: #9ca3af;
+            font-size: 0.78rem;
+            color: #94a3b8;
             line-height: 1.4;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         .nba-step {
-            font-size: 0.78rem;
-            color: #d1d5db;
+            font-size: 0.76rem;
+            color: #cbd5e1;
             margin-left: 15px;
             margin-bottom: 3px;
         }
         .nba-step::before {
             content: "• ";
-            color: #818cf8;
+            color: #3b82f6;
             font-weight: bold;
         }
     </style>
@@ -222,14 +222,14 @@ def render_call_center_assistant(active_api_key, selected_model):
     col_left, col_right = st.columns([3, 7])
 
     with col_left:
-        st.markdown("### <i class='fa-solid fa-list-check' style='color:#818cf8; margin-right:8px;'></i> Call Queue", unsafe_allow_html=True)
-        st.markdown("<p style='color: #9ca3af; font-size: 0.85rem; margin-top: -10px; margin-bottom: 15px;'>Select a call to inspect, monitor, or review next actions.</p>", unsafe_allow_html=True)
+        st.markdown("### <i class='fa-solid fa-list-check' style='color:#3b82f6; margin-right:8px;'></i> Call Queue", unsafe_allow_html=True)
+        st.markdown("<p style='color: #94a3b8; font-size: 0.85rem; margin-top: -10px; margin-bottom: 15px;'>Select a call to inspect, monitor, or review next actions.</p>", unsafe_allow_html=True)
         
         # Preloaded Call List
         for call_id, call in MOCK_CALLS.items():
             is_selected = (st.session_state.cc_selected_call_id == call_id and not st.session_state.cc_custom_active)
-            bg_color = "rgba(99, 102, 241, 0.08)" if is_selected else "rgba(255, 255, 255, 0.02)"
-            border_style = "border-left: 4px solid #818cf8;" if is_selected else "border-left: 4px solid transparent;"
+            bg_color = "rgba(59, 130, 246, 0.08)" if is_selected else "rgba(255, 255, 255, 0.02)"
+            border_style = "border-left: 4px solid #3b82f6;" if is_selected else "border-left: 4px solid transparent;"
             
             # Priority color mapping
             priority_color = "#ef4444" if call["priority"] == "Critical" else ("#f59e0b" if call["priority"] == "High" else "#3b82f6")
@@ -241,13 +241,13 @@ def render_call_center_assistant(active_api_key, selected_model):
                     <span style="font-weight: 700; color: #ffffff; font-size: 0.9rem;">{call['customer']}</span>
                     <span style="font-size: 0.7rem; background-color: {priority_color}20; color: {priority_color}; padding: 2px 6px; border-radius: 4px; font-weight: 600;">{call['priority']}</span>
                 </div>
-                <div style="font-size: 0.8rem; color: #9ca3af; margin-bottom: 6px;">Agent: {call['agent']} | {call['duration']}</div>
+                <div style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 6px;">Agent: {call['agent']} | {call['duration']}</div>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span style="font-size: 0.75rem; color: {status_color}; font-weight: 600;">
                         <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background-color: {status_color}; margin-right: 4px; {'animation: pulseReady 2s infinite;' if call['status'] == 'Active' else ''}"></span>
                         {call['status']}
                     </span>
-                    <span style="font-size: 0.75rem; color: #a5b4fc; font-weight: 500;">{call['intent']}</span>
+                    <span style="font-size: 0.75rem; color: #60a5fa; font-weight: 500;">{call['intent']}</span>
                 </div>
             </div>
             """, unsafe_allow_html=True)
@@ -267,16 +267,16 @@ def render_call_center_assistant(active_api_key, selected_model):
         # Render custom call in queue if analyzed
         if st.session_state.cc_custom_analysis:
             is_selected = st.session_state.cc_custom_active
-            bg_color = "rgba(99, 102, 241, 0.08)" if is_selected else "rgba(255, 255, 255, 0.02)"
-            border_style = "border-left: 4px solid #818cf8;" if is_selected else "border-left: 4px solid transparent;"
+            bg_color = "rgba(59, 130, 246, 0.08)" if is_selected else "rgba(255, 255, 255, 0.02)"
+            border_style = "border-left: 4px solid #3b82f6;" if is_selected else "border-left: 4px solid transparent;"
             
             st.markdown(f"""
             <div style="background-color: {bg_color}; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); {border_style} margin-bottom: 5px; margin-top: 15px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
                     <span style="font-weight: 700; color: #ffffff; font-size: 0.9rem;">Custom Uploaded Call</span>
-                    <span style="font-size: 0.7rem; background-color: rgba(167, 139, 250, 0.2); color: #c084fc; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Custom</span>
+                    <span style="font-size: 0.7rem; background-color: rgba(59, 130, 246, 0.12); color: #3b82f6; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Custom</span>
                 </div>
-                <div style="font-size: 0.8rem; color: #9ca3af; margin-bottom: 6px;">Source: File Upload | Completed</div>
+                <div style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 6px;">Source: File Upload | Completed</div>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">
                         <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background-color: #64748b; margin-right: 4px;"></span>
@@ -454,37 +454,37 @@ def render_analysis_results(analysis, engine, agent_name):
     st.markdown(f"""
     <div style="background-color: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); padding: 12px 16px; border-radius: 8px; margin-bottom: 15px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <span style="font-size: 0.8rem; font-weight: 600; color: #9ca3af;">Intent:</span>
-            <span style="font-size: 0.85rem; font-weight: 700; color: #a5b4fc;">{intent}</span>
+            <span style="font-size: 0.8rem; font-weight: 600; color: #94a3b8;">Intent:</span>
+            <span style="font-size: 0.85rem; font-weight: 700; color: #60a5fa;">{intent}</span>
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <span style="font-size: 0.8rem; font-weight: 600; color: #9ca3af;">Sentiment Trend:</span>
+            <span style="font-size: 0.8rem; font-weight: 600; color: #94a3b8;">Sentiment Trend:</span>
             <span style="font-size: 0.85rem; font-weight: 500; color: #cbd5e1;">{sentiment}</span>
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 0.8rem; font-weight: 600; color: #9ca3af;">Resolution:</span>
+            <span style="font-size: 0.8rem; font-weight: 600; color: #94a3b8;">Resolution:</span>
             <span style="font-size: 0.8rem; font-weight: 700; background-color: {status_bg}; color: {status_fg}; padding: 2px 8px; border-radius: 4px;">{res_status}</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
     # Executive Summary Card
-    st.markdown("##### <i class='fa-solid fa-quote-left' style='color:#c084fc; margin-right:5px;'></i> Executive Summary", unsafe_allow_html=True)
+    st.markdown("##### <i class='fa-solid fa-quote-left' style='color:#3b82f6; margin-right:5px;'></i> Executive Summary", unsafe_allow_html=True)
     st.markdown(f"<div style='background-color: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.03); padding: 10px 14px; border-radius: 8px; font-size: 0.85rem; line-height: 1.5; color: #d1d5db; margin-bottom: 15px;'>{analysis.get('summary', 'Extracting summary...')}</div>", unsafe_allow_html=True)
 
     # Extracted Entities Checklist
     entities = analysis.get("entities", [])
     if entities:
-        st.markdown("##### <i class='fa-solid fa-tags' style='color:#a5b4fc; margin-right:5px;'></i> Extracted Entities", unsafe_allow_html=True)
+        st.markdown("##### <i class='fa-solid fa-tags' style='color:#60a5fa; margin-right:5px;'></i> Extracted Entities", unsafe_allow_html=True)
         entity_html = "<div style='display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 15px;'>"
         for ent in entities:
-            entity_html += f"<span style='background-color: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 3px 8px; border-radius: 6px; font-size: 0.725rem; color: #e2e8f0;'><strong style='color:#a5b4fc;'>{ent['name']}:</strong> {ent['value']}</span>"
+            entity_html += f"<span style='background-color: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); padding: 3px 8px; border-radius: 6px; font-size: 0.725rem; color: #e2e8f0;'><strong style='color:#60a5fa;'>{ent['name']}:</strong> {ent['value']}</span>"
         entity_html += "</div>"
         st.markdown(entity_html, unsafe_allow_html=True)
 
     # Next Best Action (NBA) Generator
-    st.markdown("##### <i class='fa-solid fa-wand-magic-sparkles' style='color:#c084fc; margin-right:5px;'></i> Recommended Next Best Actions (NBA)", unsafe_allow_html=True)
-    st.markdown("<p style='color: #9ca3af; font-size: 0.78rem; margin-top:-6px; margin-bottom: 10px;'>Select approved actions to push immediately to the agent's work-screen.</p>", unsafe_allow_html=True)
+    st.markdown("##### <i class='fa-solid fa-wand-magic-sparkles' style='color:#3b82f6; margin-right:5px;'></i> Recommended Next Best Actions (NBA)", unsafe_allow_html=True)
+    st.markdown("<p style='color: #94a3b8; font-size: 0.78rem; margin-top:-6px; margin-bottom: 10px;'>Select approved actions to push immediately to the agent's work-screen.</p>", unsafe_allow_html=True)
 
     actions = analysis.get("next_best_actions", [])
     if not actions:
