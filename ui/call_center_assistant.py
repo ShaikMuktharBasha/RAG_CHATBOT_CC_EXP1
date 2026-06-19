@@ -446,6 +446,7 @@ def render_analysis_results(analysis, engine, agent_name):
     sentiment = analysis.get("sentiment_trend", "Neutral")
     intent = analysis.get("intent", "General Inquiry")
     res_status = analysis.get("resolution_status", "In Progress")
+    model_status = analysis.get("model_status", "🟢 Local HF Models Active")
     
     # Status styling
     status_bg = "rgba(16, 185, 129, 0.15)" if res_status == "Resolved" else ("rgba(245, 158, 11, 0.15)" if res_status == "In Progress" else "rgba(239, 68, 68, 0.15)")
@@ -454,22 +455,25 @@ def render_analysis_results(analysis, engine, agent_name):
     st.markdown(f"""
     <div style="background-color: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); padding: 12px 16px; border-radius: 8px; margin-bottom: 15px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <span style="font-size: 0.8rem; font-weight: 600; color: #94a3b8;">Intent:</span>
+            <span style="font-size: 0.8rem; font-weight: 600; color: #94a3b8;">Intent <span style="font-size: 0.65rem; font-weight: normal; font-style: italic;">(Zero-Shot)</span>:</span>
             <span style="font-size: 0.85rem; font-weight: 700; color: #60a5fa;">{intent}</span>
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <span style="font-size: 0.8rem; font-weight: 600; color: #94a3b8;">Sentiment Trend:</span>
+            <span style="font-size: 0.8rem; font-weight: 600; color: #94a3b8;">Sentiment <span style="font-size: 0.65rem; font-weight: normal; font-style: italic;">(DistilBERT)</span>:</span>
             <span style="font-size: 0.85rem; font-weight: 500; color: #cbd5e1;">{sentiment}</span>
         </div>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
             <span style="font-size: 0.8rem; font-weight: 600; color: #94a3b8;">Resolution:</span>
             <span style="font-size: 0.8rem; font-weight: 700; background-color: {status_bg}; color: {status_fg}; padding: 2px 8px; border-radius: 4px;">{res_status}</span>
+        </div>
+        <div style="text-align: right; border-top: 1px solid rgba(255, 255, 255, 0.03); margin-top: 8px; padding-top: 6px;">
+            <span style="font-size: 0.68rem; color: #94a3b8; font-weight: 600;">{model_status}</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
     # Executive Summary Card
-    st.markdown("##### <i class='fa-solid fa-quote-left' style='color:#3b82f6; margin-right:5px;'></i> Executive Summary", unsafe_allow_html=True)
+    st.markdown("##### <i class='fa-solid fa-quote-left' style='color:#3b82f6; margin-right:5px;'></i> Executive Summary <span style='font-size:0.65rem; font-weight:normal; font-style:italic; color:#94a3b8;'> (BART Model - 1 or 2 sentences)</span>", unsafe_allow_html=True)
     st.markdown(f"<div style='background-color: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.03); padding: 10px 14px; border-radius: 8px; font-size: 0.85rem; line-height: 1.5; color: #d1d5db; margin-bottom: 15px;'>{analysis.get('summary', 'Extracting summary...')}</div>", unsafe_allow_html=True)
 
     # Extracted Entities Checklist

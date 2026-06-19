@@ -1,8 +1,6 @@
 import os
 import json
 from dotenv import load_dotenv
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.prompts import ChatPromptTemplate
 
 # ----------------- PRELOADED MOCK CALL DATA -----------------
 MOCK_CALLS = {
@@ -11,21 +9,20 @@ MOCK_CALLS = {
         "customer": "Sarah Connor",
         "agent": "John Smith",
         "status": "Completed",
-        "duration": "4m 12s",
+        "duration": "3m 45s",
         "initial_sentiment": "Negative (Frustrated)",
         "current_sentiment": "Positive (Satisfied)",
         "priority": "High",
-        "intent": "Billing Dispute",
+        "intent": "Shipping Inquiry",
         "transcript": [
-            {"speaker": "Sarah Connor", "text": "Hi, I'm calling because my bill this month has a charge of $45 for some 'Premium Service Package' that I never signed up for! This is ridiculous, I want this refunded immediately."},
-            {"speaker": "John Smith", "text": "Hi Ms. Connor, I understand your frustration. Let me look up your account. Can I have your account number?"},
-            {"speaker": "Sarah Connor", "text": "It's ACCT-98217-CC. I've been a loyal customer for 5 years and this is how you treat us?"},
-            {"speaker": "John Smith", "text": "Thank you. Let me check... Ah yes, I see the $45 charge. It looks like it was auto-applied when the trial period ended. I see you did not authorize it. Let me request a waiver for this."},
-            {"speaker": "Sarah Connor", "text": "It should be waived! I don't want to see this on my bill again."},
-            {"speaker": "John Smith", "text": "Absolutely, I'm processing the $45 credit refund right now. It will appear on your next statement. I'm also removing the package so you won't be billed again."},
-            {"speaker": "Sarah Connor", "text": "Okay, thank you. I appreciate you fixing this quickly. I was about to cancel my service."},
-            {"speaker": "John Smith", "text": "You're very welcome. Is there anything else I can assist you with today?"},
-            {"speaker": "Sarah Connor", "text": "No, that's all. Thank you."}
+            {"speaker": "Sarah Connor", "text": "Hello, I'm calling because my delivery package with tracking ID SH-98217-CC has been stuck in transit for the last 5 days. I paid for overnight shipping and this is unacceptable!"},
+            {"speaker": "John Smith", "text": "Hi Ms. Connor, I sincerely apologize for the delay. Let me check the shipping ledger for package SH-98217-CC. Can you confirm the shipping address?"},
+            {"speaker": "Sarah Connor", "text": "It's 1829 Industrial Road. It was supposed to be delivered last Monday."},
+            {"speaker": "John Smith", "text": "Thank you. Let me check... Ah, I see. It looks like the shipping courier routed it to the wrong sorting hub. Let me expedite it. I am also refunding your $15 shipping fee."},
+            {"speaker": "Sarah Connor", "text": "Well, thank you for the refund, but when will it arrive? I need this item by tomorrow."},
+            {"speaker": "John Smith", "text": "I've updated the carrier priority to express air. It is scheduled to arrive at your doorstep tomorrow by 12:00 PM. I'll email you the new tracking logs."},
+            {"speaker": "Sarah Connor", "text": "Okay, that sounds much better. Thank you for fixing this."},
+            {"speaker": "John Smith", "text": "You're very welcome, Ms. Connor. Have a great day!"}
         ]
     },
     "2": {
@@ -37,15 +34,16 @@ MOCK_CALLS = {
         "initial_sentiment": "Frustrated",
         "current_sentiment": "Neutral",
         "priority": "Critical",
-        "intent": "Technical Support",
+        "intent": "Travel Inquiry",
         "transcript": [
-            {"speaker": "David Lightman", "text": "Hello, my internet has been down for the last 2 hours. I have a critical online work presentation starting in 15 minutes! I need this resolved right now."},
-            {"speaker": "Jennifer Mack", "text": "Hi Mr. Lightman, I understand the urgency. Let's get this fixed for you. Can you tell me which lights are active on your router?"},
-            {"speaker": "David Lightman", "text": "Only the power light is solid green. The internet light is blinking red, and the WAN light is completely off."},
-            {"speaker": "Jennifer Mack", "text": "Got it. Red internet light means the router isn't getting a signal from our server. Let's do a quick physical check first. Is the green coaxial cable firmly screwed in?"},
-            {"speaker": "David Lightman", "text": "Yes, I checked. It's tight. I also unplugged the power for 30 seconds and plugged it back in, but it didn't change anything."},
-            {"speaker": "Jennifer Mack", "text": "Okay, thanks for doing that. Let me run a line diagnostic check from my end. One moment..."},
-            {"speaker": "Jennifer Mack", "text": "The signal to your modem is unreachable. It seems like there might be a local area outage or a physical line break."}
+            {"speaker": "David Lightman", "text": "Hi, I need to reschedule my travel flight ticket from New York to Chicago tomorrow. My booking reference is TRV-8821. My meeting was moved, so I need a later departure."},
+            {"speaker": "Jennifer Mack", "text": "Hello Mr. Lightman, I can help you with your travel itinerary. Let me pull up booking TRV-8821. I see you are currently on the 8:00 AM flight."},
+            {"speaker": "David Lightman", "text": "Yes, I need to change that to any flight departing after 3:00 PM tomorrow if possible. What options do we have?"},
+            {"speaker": "Jennifer Mack", "text": "Let me check available seats... I have an evening flight departing at 5:30 PM with seats available. However, there is a travel ticket change fee of $50."},
+            {"speaker": "David Lightman", "text": "Is there any way to waive that fee? I travel with your airline frequently."},
+            {"speaker": "Jennifer Mack", "text": "Let me check your frequent flyer status... Since you are a Gold member, I can waive the travel change fee for you. I will book you on the 5:30 PM flight now."},
+            {"speaker": "David Lightman", "text": "Excellent! Thank you so much. That's very helpful."},
+            {"speaker": "Jennifer Mack", "text": "All set. The updated ticket confirmation has been sent to your email. Safe travels!"}
         ]
     },
     "3": {
@@ -94,74 +92,261 @@ MOCK_CALLS = {
     }
 }
 
+# ----------------- HUGGINGFACE MODEL CACHE LOADERS -----------------
+# Dynamically load the pipelines inside Streamlit to avoid heavy startup penalty.
+# Fallback to rules if models fail to download or load.
+
+def get_streamlit_cache_decorator():
+    try:
+        import streamlit as st
+        return st.cache_resource
+    except ImportError:
+        def dummy_decorator(*args, **kwargs):
+            def inner(func):
+                return func
+            return inner
+        return dummy_decorator
+
+cache_decorator = get_streamlit_cache_decorator()
+
+@cache_decorator(show_spinner="Loading BART Summarization Model...")
+def load_bart_summarizer():
+    try:
+        from transformers import pipeline
+        # facebook/bart-large-cnn generates high-quality summaries
+        return pipeline("summarization", model="facebook/bart-large-cnn")
+    except Exception as e:
+        print(f"BART Summarizer load failed, falling back: {e}")
+        return None
+
+@cache_decorator(show_spinner="Loading DistilBERT Sentiment Model...")
+def load_distilbert_sentiment():
+    try:
+        from transformers import pipeline
+        return pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
+    except Exception as e:
+        print(f"DistilBERT Sentiment load failed, falling back: {e}")
+        return None
+
+@cache_decorator(show_spinner="Loading Zero-Shot Intent Classifier...")
+def load_zero_shot_classifier():
+    try:
+        from transformers import pipeline
+        # facebook/bart-large-mnli is standard for zero-shot tasks
+        return pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
+    except Exception as e:
+        # Fallback to lighter model if memory is restricted
+        try:
+            from transformers import pipeline
+            return pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli")
+        except Exception as ex:
+            print(f"Zero-shot load failed, falling back: {ex}")
+            return None
+
+
 class CallCenterEngine:
     def __init__(self, google_api_key=None, model="gemini-1.5-flash"):
         load_dotenv()
-        api_key = google_api_key or os.environ.get("GOOGLE_API_KEY")
         
-        if api_key:
-            self.llm = ChatGoogleGenerativeAI(
-                model=model,
-                temperature=0.2,
-                google_api_key=api_key
-            )
-        else:
-            self.llm = None
-
-        self.system_prompt = (
-            "You are an expert Call Center Supervisor AI Assistant.\n"
-            "Analyze the provided call center transcript and return a JSON object strictly containing the following keys:\n"
-            "- 'intent': String representing the customer's core intent (e.g. Billing Dispute, Outage, Retention, Upgrade).\n"
-            "- 'summary': A concise 2-3 sentence executive summary of the conversation.\n"
-            "- 'sentiment_trend': A short summary of sentiment changes (e.g., 'Frustrated -> Satisfied' or 'Anxious -> Relieved').\n"
-            "- 'entities': A list of dictionaries representing extracted entities. Each dictionary should have 'name' (e.g. Account Number, Refund Amount, competitor) and 'value'.\n"
-            "- 'resolution_status': String representing the status (e.g., 'Resolved', 'In Progress', 'Escalation Required').\n"
-            "- 'next_best_actions': A list of 2-3 actions. Each action is a dictionary with 'action' (the recommended step name), 'confidence' (float between 0.0 and 1.0), 'reason' (why this is suggested), and 'steps' (a list of 1-3 sub-steps to perform this action).\n\n"
-            "Return ONLY the raw valid JSON. Do not include markdown code block styling like ```json. Do not include any trailing or leading explanation text."
-        )
+        # Keep local model loader status
+        self.summarizer = load_bart_summarizer()
+        self.sentiment_model = load_distilbert_sentiment()
+        self.zero_shot_model = load_zero_shot_classifier()
 
     def analyze_transcript(self, transcript_text):
-        """Analyze transcript using Gemini LLM if available, otherwise fallback to local keyword rules."""
-        if self.llm:
+        """Analyze call transcript using HuggingFace models, falls back to rules if failed."""
+        results = {
+            "intent": "Unclassified",
+            "summary": "Generating summary...",
+            "sentiment_trend": "Neutral",
+            "entities": [],
+            "resolution_status": "In Progress",
+            "next_best_actions": [],
+            "model_status": "🟢 Local HF Models Active"
+        }
+
+        # 1. Local HF BART Summarization (exactly 1-2 sentences)
+        if self.summarizer:
             try:
-                prompt = ChatPromptTemplate.from_messages([
-                    ("system", self.system_prompt),
-                    ("human", "Analyze this transcript:\n\n{transcript}")
-                ])
-                chain = prompt | self.llm
-                response = chain.invoke({"transcript": transcript_text})
-                
-                # Strip code blocks if LLM still formats it as markdown
-                content = response.content.strip()
-                if content.startswith("```json"):
-                    content = content[7:]
-                if content.endswith("```"):
-                    content = content[:-3]
-                content = content.strip()
-                
-                result = json.loads(content)
-                return result
+                # Limit input text length to avoid overflow
+                summary_input = transcript_text[:1024]
+                summary_out = self.summarizer(summary_input, max_length=55, min_length=25, do_sample=False)
+                summary_text = summary_out[0]['summary_text'].strip()
+                # Clean up punctuation spacing if any
+                summary_text = summary_text.replace(" .", ".")
+                results["summary"] = summary_text
             except Exception as e:
-                # If LLM call or JSON parsing fails, fallback to local analysis
-                return self.generate_offline_analysis(transcript_text, error_msg=str(e))
+                results["summary"] = f"BART Error: {e}"
         else:
-            return self.generate_offline_analysis(transcript_text)
+            results["model_status"] = "⚠️ Rule-based Fallback Active"
+
+        # 2. Local HF DistilBERT Sentiment Analysis
+        if self.sentiment_model:
+            try:
+                # Analyze the last 300 chars of dialogue to find final resolution sentiment
+                sentiment_input = transcript_text[-300:]
+                sentiment_out = self.sentiment_model(sentiment_input)
+                label = sentiment_out[0]['label']
+                score = sentiment_out[0]['score']
+                
+                # Format to a nice text representation
+                sentiment_lbl = "Positive (Satisfied)" if label == "LABEL_1" or "pos" in label.lower() else "Negative (Frustrated)"
+                results["sentiment_trend"] = f"{sentiment_lbl} (DistilBERT: {int(score * 100)}% Conf)"
+            except Exception as e:
+                results["sentiment_trend"] = f"Sentiment Error: {e}"
+
+        # 3. Local HF Zero-Shot Classification (whether shipping or travel)
+        if self.zero_shot_model:
+            try:
+                candidate_labels = ["shipping", "travel", "billing", "technical support"]
+                classification_out = self.zero_shot_model(transcript_text[:1024], candidate_labels=candidate_labels)
+                
+                # Get the highest score
+                best_label = classification_out['labels'][0]
+                best_score = classification_out['scores'][0]
+                
+                # Determine classification (shipping vs travel or other)
+                results["intent"] = f"{best_label.capitalize()} ({int(best_score * 100)}% Match)"
+                
+                if best_label == "shipping":
+                    results["entities"] = [
+                        {"name": "Intent Category", "value": "Shipping (Zero-Shot)"},
+                        {"name": "Confidence Level", "value": f"{int(best_score * 100)}%"}
+                    ]
+                elif best_label == "travel":
+                    results["entities"] = [
+                        {"name": "Intent Category", "value": "Travel (Zero-Shot)"},
+                        {"name": "Confidence Level", "value": f"{int(best_score * 100)}%"}
+                    ]
+            except Exception as e:
+                results["intent"] = f"Zero-shot Error: {e}"
+
+        # Merge in rules/mock actions to ensure realistic output and resolution items
+        fallback = self.generate_offline_analysis(transcript_text)
+        
+        # If Summarizer failed or was not loaded, use rule-based summary
+        if not self.summarizer or "Error" in results["summary"] or len(results["summary"]) < 5:
+            results["summary"] = fallback["summary"]
+            
+        # If Sentiment model failed or was not loaded, use rule-based sentiment
+        if not self.sentiment_model or "Error" in results["sentiment_trend"]:
+            results["sentiment_trend"] = fallback["sentiment_trend"]
+            
+        # If Zero Shot model failed or was not loaded, use rule-based intent
+        if not self.zero_shot_model or "Error" in results["intent"] or results["intent"] == "Unclassified":
+            results["intent"] = fallback["intent"]
+            results["entities"] = fallback["entities"]
+
+        results["resolution_status"] = fallback["resolution_status"]
+        results["next_best_actions"] = fallback["next_best_actions"]
+
+        # Parse specific entities from transcript using rule regexes to make it complete
+        results["entities"].extend(self.extract_regex_entities(transcript_text))
+
+        return results
+
+    def extract_regex_entities(self, text):
+        """Helper to extract account numbers or tracking numbers from transcript."""
+        entities = []
+        words = text.split()
+        for w in words:
+            # Clean symbols
+            w_clean = w.strip(".,:;!?()\"'")
+            if "SH-" in w_clean:
+                entities.append({"name": "Tracking ID", "value": w_clean})
+            elif "TRV-" in w_clean:
+                entities.append({"name": "Booking Reference", "value": w_clean})
+            elif "ACCT-" in w_clean:
+                entities.append({"name": "Account Number", "value": w_clean})
+        return entities
 
     def generate_offline_analysis(self, transcript_text, error_msg=None):
-        """Analyzes transcript offline based on keyword rules."""
+        """Offline metadata generator if transformers libraries are unavailable."""
         text_lower = transcript_text.lower()
         
-        # Billing dispute keyword match
-        if any(kw in text_lower for kw in ["charge", "$45", "bill", "refund", "billing", "credit"]):
+        # Shipping query
+        if any(kw in text_lower for kw in ["shipping", "tracking", "package", "transit", "sh-", "delivery"]):
             return {
-                "intent": "Billing Dispute",
+                "intent": "Shipping Inquiry (Mock)",
+                "summary": "Customer Sarah Connor reports her package SH-98217-CC has been delayed in transit. The agent resolved the inquiry by upgrading shipping speed and crediting fees.",
+                "sentiment_trend": "Negative (Frustrated) ➔ Positive (Satisfied)",
+                "entities": [
+                    {"name": "Intent Category", "value": "Shipping"},
+                    {"name": "Tracking ID", "value": "SH-98217-CC"},
+                    {"name": "Refund Amount", "value": "$15.00"}
+                ],
+                "resolution_status": "Resolved",
+                "next_best_actions": [
+                    {
+                        "action": "Process $15 Shipping Refund",
+                        "confidence": 0.98,
+                        "reason": "Customer paid for overnight courier delivery which was delayed by routing mistakes. Refunding fee maintains customer trust.",
+                        "steps": [
+                            "Open Shipping Ledger console",
+                            "Initiate credit transaction refund of $15.00",
+                            "Confirm email notification transaction receipt is sent"
+                        ]
+                    },
+                    {
+                        "action": "Expedite Courier Route Priority",
+                        "confidence": 0.94,
+                        "reason": "Change status of transit dispatch to Express Air delivery to ensure arrival by next day SLA.",
+                        "steps": [
+                            "Access courier booking portal",
+                            "Flag tracking ID SH-98217-CC as priority air freight",
+                            "Alert local courier dispatch supervisor"
+                        ]
+                    }
+                ]
+            }
+            
+        # Travel booking query
+        elif any(kw in text_lower for kw in ["travel", "flight", "ticket", "reschedule", "trv-", "chicago"]):
+            return {
+                "intent": "Travel Inquiry (Mock)",
+                "summary": "Customer David Lightman requested a departure change for his flight to Chicago. Agent waived the travel change fees due to frequency flyer status and booked him on an evening flight.",
+                "sentiment_trend": "Frustrated ➔ Positive",
+                "entities": [
+                    {"name": "Intent Category", "value": "Travel"},
+                    {"name": "Booking Reference", "value": "TRV-8821"},
+                    {"name": "Frequent Flyer Tier", "value": "Gold member"}
+                ],
+                "resolution_status": "Resolved",
+                "next_best_actions": [
+                    {
+                        "action": "Waive Rescheduling Travel Fees",
+                        "confidence": 0.95,
+                        "reason": "Gold frequent flyers qualify for complimentary booking adjustments. Applying waiver increases loyalty metric.",
+                        "steps": [
+                            "Select billing adjust code: COMP_LOYALTY_TICKET",
+                            "Apply ticket waiver indicator checkmark",
+                            "Save itinerary ledger logs"
+                        ]
+                    },
+                    {
+                        "action": "Rebook Evening Route Slot",
+                        "confidence": 0.92,
+                        "reason": "Rescheduled meeting demands travel departure after 3:00 PM slot. 5:30 PM flight has available seating capacity.",
+                        "steps": [
+                            "Unassign morning flight seat seat log",
+                            "Select seat row on 5:30 PM flight departure",
+                            "Transmit rebooked digital e-tickets"
+                        ]
+                    }
+                ]
+            }
+
+        # Billing dispute keyword match
+        elif any(kw in text_lower for kw in ["charge", "$45", "bill", "refund", "billing", "credit"]):
+            return {
+                "intent": "Billing Dispute (Mock)",
                 "summary": "Customer Sarah Connor contacted support regarding an unauthorized premium package charge of $45. The agent verified the billing error and applied a statement credit.",
                 "sentiment_trend": "Negative (Frustrated) ➔ Positive (Satisfied)",
                 "entities": [
+                    {"name": "Intent Category", "value": "Billing"},
                     {"name": "Customer Name", "value": "Sarah Connor"},
                     {"name": "Account Number", "value": "ACCT-98217-CC"},
-                    {"name": "Disputed Charge", "value": "$45.00"},
-                    {"name": "Adjustment Type", "value": "Billing Credit"}
+                    {"name": "Disputed Charge", "value": "$45.00"}
                 ],
                 "resolution_status": "Resolved",
                 "next_best_actions": [
@@ -174,53 +359,6 @@ class CallCenterEngine:
                             "Initiate credit adjustment for $45.00 with reference code BILL_ERR_2026",
                             "Verify change status reflects on supervisor ledger"
                         ]
-                    },
-                    {
-                        "action": "Verify Premium Trial Exclusion",
-                        "confidence": 0.92,
-                        "reason": "Ensure account flag is set to exclude automatic trial opt-ins to prevent repeat billing issues.",
-                        "steps": [
-                            "Navigate to Account Services tab",
-                            "Disable auto-renew for premium bundles",
-                            "Save account attributes profile"
-                        ]
-                    }
-                ]
-            }
-            
-        # Tech support outage keyword match
-        elif any(kw in text_lower for kw in ["down", "outage", "router", "wan", "signal", "internet"]):
-            return {
-                "intent": "Technical Support",
-                "summary": "Customer David Lightman reports a complete internet outage that is interfering with their remote work schedule. Agent diagnostics indicate a link outage or localized fiber break.",
-                "sentiment_trend": "Frustrated ➔ Neutral",
-                "entities": [
-                    {"name": "Customer Name", "value": "David Lightman"},
-                    {"name": "Modem Status", "value": "Offline"},
-                    {"name": "WAN Port Status", "value": "No Link Detect"},
-                    {"name": "Internet LED Indicator", "value": "Blinking Red"}
-                ],
-                "resolution_status": "Escalation Required",
-                "next_best_actions": [
-                    {
-                        "action": "Dispatch Field Technician (Priority)",
-                        "confidence": 0.95,
-                        "reason": "Physical coaxial/fiber signal test fails to respond, confirming a hardware layer interruption rather than a local configurations issue.",
-                        "steps": [
-                            "Create Dispatch Ticket in Field Services Console",
-                            "Set priority to HIGH (Remote worker SLA)",
-                            "Confirm appointment window with the client"
-                        ]
-                    },
-                    {
-                        "action": "Check Regional Fiber Outage Map",
-                        "confidence": 0.90,
-                        "reason": "Validate if the downstream line is part of a larger ongoing switch maintenance window or area incident.",
-                        "steps": [
-                            "Access Network Operations Center (NOC) live feed",
-                            "Cross-reference customer ZIP code with active alert grid",
-                            "Report node status to local dispatcher"
-                        ]
                     }
                 ]
             }
@@ -228,13 +366,13 @@ class CallCenterEngine:
         # Retention keyword match
         elif any(kw in text_lower for kw in ["cancel", "competitor", "provider", "netspeed", "$50", "leaving"]):
             return {
-                "intent": "Customer Retention",
+                "intent": "Customer Retention (Mock)",
                 "summary": "Customer Ellen Ripley requested cancellation due to a competitive offer of 1Gbps for $50/month. The agent retained the customer by matching the price and upgrading their line.",
                 "sentiment_trend": "Dissatisfied ➔ Positive",
                 "entities": [
+                    {"name": "Intent Category", "value": "Retention"},
                     {"name": "Customer Name", "value": "Ellen Ripley"},
                     {"name": "Competitor Brand", "value": "NetSpeed"},
-                    {"name": "Competitor Price", "value": "$50.00/mo"},
                     {"name": "Matching Offer", "value": "$49.99/mo (Fiber 1G)"}
                 ],
                 "resolution_status": "Resolved",
@@ -248,16 +386,6 @@ class CallCenterEngine:
                             "Apply code LOYAL_1G_49.99 to account template",
                             "Submit price override for supervisor auditing signature"
                         ]
-                    },
-                    {
-                        "action": "Send Contract Details & Upgrades Email",
-                        "confidence": 0.88,
-                        "reason": "Explicit summary of the matched rates and speeds solidifies client alignment and minimizes buyer remorse.",
-                        "steps": [
-                            "Select loyalty email template in SMTP service",
-                            "Populate matching offer data points",
-                            "Send and log verification log into ticket ledger"
-                        ]
                     }
                 ]
             }
@@ -265,14 +393,14 @@ class CallCenterEngine:
         # Upgrade keyword match
         elif any(kw in text_lower for kw in ["upgrade", "speed", "fiber", "sluggish", "1gbps"]):
             return {
-                "intent": "Account Upgrade",
+                "intent": "Account Upgrade (Mock)",
                 "summary": "Customer Bruce Wayne requested line speed upgrades to support extra home devices. The agent upgraded the service plan to 1Gbps Fiber and waived router equipment fees.",
                 "sentiment_trend": "Positive ➔ Positive",
                 "entities": [
+                    {"name": "Intent Category", "value": "Upgrade"},
                     {"name": "Customer Name", "value": "Bruce Wayne"},
                     {"name": "Current Plan Speed", "value": "100 Mbps"},
-                    {"name": "New Plan Speed", "value": "1000 Mbps (1 Gbps)"},
-                    {"name": "Waiver Applied", "value": "Router Fee ($10/mo)"}
+                    {"name": "New Plan Speed", "value": "1000 Mbps (1 Gbps)"}
                 ],
                 "resolution_status": "Resolved",
                 "next_best_actions": [
@@ -285,16 +413,6 @@ class CallCenterEngine:
                             "Re-profile customer WAN MAC address to 1Gbps Downstream profile",
                             "Execute remote line restart signal"
                         ]
-                    },
-                    {
-                        "action": "Configure Lifetime Router Waiver flag",
-                        "confidence": 0.95,
-                        "reason": "The agent promised a rental equipment waiver. Supervisors must verify this flag to avoid billing automated fees.",
-                        "steps": [
-                            "Select hardware rental items from account inventory",
-                            "Check 'Waive Hardware Rental Charges' checkbox",
-                            "Log waiver memo: 'Loyalty upgrade hardware incentive'"
-                        ]
                     }
                 ]
             }
@@ -303,11 +421,10 @@ class CallCenterEngine:
         else:
             return {
                 "intent": "General Inquiry",
-                "summary": "Customer is communicating with agent. The transcript has been processed successfully, but could not be categorized into one of our predefined default categories.",
+                "summary": "Customer is communicating with agent regarding account configurations.",
                 "sentiment_trend": "Neutral ➔ Neutral",
                 "entities": [
-                    {"name": "Conversation length", "value": f"{len(transcript_text.split())} words"},
-                    {"name": "System Status", "value": "Online"}
+                    {"name": "Intent Category", "value": "General"}
                 ],
                 "resolution_status": "In Progress",
                 "next_best_actions": [
