@@ -74,6 +74,12 @@ def render_auth_page():
     # CSS overrides for the split-screen design
     st.markdown("""
         <style>
+        /* Force no scrollbars on the login page viewport */
+        html, body, [class*="css"], .stApp, [data-testid="stAppViewContainer"] {
+            overflow: hidden !important;
+            height: 100vh !important;
+        }
+        
         /* Hide default Streamlit sidebar and controls during login/signup */
         [data-testid="stSidebar"] {
             display: none !important;
@@ -81,25 +87,35 @@ def render_auth_page():
         [data-testid="stSidebarCollapseButton"] {
             display: none !important;
         }
+        [data-testid="stHeader"] {
+            display: none !important;
+        }
+        
+        /* Compress block margins */
+        div.block-container {
+            padding-top: 1.5rem !important;
+            padding-bottom: 0rem !important;
+            max-width: 95% !important;
+        }
         
         /* Form Header label */
         .upper-header {
             color: #9ca3af !important;
-            font-size: 0.75rem !important;
+            font-size: 0.725rem !important;
             font-weight: 700 !important;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            margin-top: 8px;
+            margin-top: 4px;
         }
         
         /* Style the native Streamlit Form container box to be dark glassmorphism */
         div[data-testid="stForm"] {
             background-color: rgba(17, 24, 39, 0.45) !important;
             border-radius: 16px !important;
-            padding: 30px !important;
+            padding: 20px 25px !important;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
             border: 1px solid rgba(255, 255, 255, 0.08) !important;
-            min-height: 460px;
+            min-height: 380px;
             backdrop-filter: blur(12px) !important;
             -webkit-backdrop-filter: blur(12px) !important;
         }
@@ -194,29 +210,29 @@ def render_auth_page():
                 
             # Render as self-contained HTML block using st.html to prevent markdown parsing issues
             st.html(f"""
-            <div style="{background_css} background-size: cover; background-position: center; border-radius: 16px; min-height: 520px; padding: 40px; display: flex; align-items: flex-end; position: relative; width: 100%; box-sizing: border-box; overflow: hidden;">
+            <div style="{background_css} background-size: cover; background-position: center; border-radius: 16px; min-height: 440px; padding: 25px; display: flex; align-items: flex-end; position: relative; width: 100%; box-sizing: border-box; overflow: hidden;">
                 <!-- Dark Gradient Overlay for text readability -->
                 <div style="position: absolute; top:0; left:0; right:0; bottom:0; background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%); border-radius: 16px; z-index: 1;"></div>
                 
                 <!-- Glassmorphic Details Card -->
-                <div style="position: relative; z-index: 2; background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 24px; width: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.25); box-sizing: border-box;">
-                    <div style="font-size: 0.725rem; text-transform: uppercase; font-weight: 700; color: #ffedd5; letter-spacing: 0.08em; margin-bottom: 8px;">Knowledge at your fingertips</div>
-                    <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.7rem; font-weight: 800; color: #ffffff; line-height: 1.25; margin: 0 0 10px 0; letter-spacing: -0.02em;">Simplify Document Intelligence</h2>
-                    <p style="color: #ffedd5; font-size: 0.825rem; line-height: 1.45; margin: 0 0 20px 0; font-weight: 300; opacity: 0.9;">Discover a faster way to query employee handbooks, translate documents, and run machine learning experiments from a single portal.</p>
+                <div style="position: relative; z-index: 2; background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 18px; width: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.25); box-sizing: border-box;">
+                    <div style="font-size: 0.65rem; text-transform: uppercase; font-weight: 700; color: #ffedd5; letter-spacing: 0.08em; margin-bottom: 6px;">Knowledge at your fingertips</div>
+                    <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.4rem; font-weight: 800; color: #ffffff; line-height: 1.25; margin: 0 0 6px 0; letter-spacing: -0.02em;">Simplify Document Intelligence</h2>
+                    <p style="color: #ffedd5; font-size: 0.78rem; line-height: 1.4; margin: 0 0 12px 0; font-weight: 300; opacity: 0.9;">Discover a faster way to query employee handbooks, translate documents, and run machine learning experiments from a single portal.</p>
                     
                     <!-- Feature Lists -->
-                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <span style="background: rgba(255,255,255,0.15); width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i class="fa-solid fa-lightbulb" style="color: #ffffff; font-size: 0.8rem;"></i></span>
-                            <span style="color: #ffffff; font-size: 0.85rem; font-weight: 600;">Instant AI-Powered Summaries</span>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="background: rgba(255,255,255,0.15); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i class="fa-solid fa-lightbulb" style="color: #ffffff; font-size: 0.7rem;"></i></span>
+                            <span style="color: #ffffff; font-size: 0.8rem; font-weight: 600;">Instant AI-Powered Summaries</span>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <span style="background: rgba(255,255,255,0.15); width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i class="fa-solid fa-comments" style="color: #ffffff; font-size: 0.8rem;"></i></span>
-                            <span style="color: #ffffff; font-size: 0.85rem; font-weight: 600;">Interactive PDF & RAG Q&A</span>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="background: rgba(255,255,255,0.15); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i class="fa-solid fa-comments" style="color: #ffffff; font-size: 0.7rem;"></i></span>
+                            <span style="color: #ffffff; font-size: 0.8rem; font-weight: 600;">Interactive PDF & RAG Q&A</span>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <span style="background: rgba(255,255,255,0.15); width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i class="fa-solid fa-flask" style="color: #ffffff; font-size: 0.8rem;"></i></span>
-                            <span style="color: #ffffff; font-size: 0.85rem; font-weight: 600;">22 Laboratory Experiments</span>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="background: rgba(255,255,255,0.15); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i class="fa-solid fa-flask" style="color: #ffffff; font-size: 0.7rem;"></i></span>
+                            <span style="color: #ffffff; font-size: 0.8rem; font-weight: 600;">22 Laboratory Experiments</span>
                         </div>
                     </div>
                 </div>
@@ -246,8 +262,8 @@ def render_auth_page():
             # Form Card container (using st.form so elements stay inside cleanly)
             if st.session_state.auth_mode == "login":
                 with st.form(key="login_form"):
-                    st.markdown("<h2 style='font-size: 2.1rem; font-weight: 700; margin-top: 0px; margin-bottom: 2px;'>Log in</h2>", unsafe_allow_html=True)
-                    st.markdown("<p style='color: #6b7280; font-size: 0.85rem; margin-bottom: 20px;'>Open your saved uploads, summaries, and 22 NLP experiments from one unified workspace.</p>", unsafe_allow_html=True)
+                    st.markdown("<h2 style='font-size: 1.8rem; font-weight: 700; margin-top: 0px; margin-bottom: 2px;'>Log in</h2>", unsafe_allow_html=True)
+                    st.markdown("<p style='color: #6b7280; font-size: 0.8rem; margin-bottom: 12px;'>Open your saved uploads, summaries, and 22 NLP experiments from one unified workspace.</p>", unsafe_allow_html=True)
                     
                     # Display signup success message if redirecting from signup
                     if "signup_success" in st.session_state and st.session_state.signup_success:
