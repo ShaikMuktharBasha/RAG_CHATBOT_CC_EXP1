@@ -270,6 +270,15 @@ def render_auth_page():
                             st.rerun()
                         else:
                             st.error("Invalid username or password.")
+                
+                # Add "Continue as Guest" option directly below the login form card
+                st.markdown("<div style='margin-top: 12px;'></div>", unsafe_allow_html=True)
+                guest_login = st.button("Continue as Guest", key="guest_login_btn", use_container_width=True)
+                if guest_login:
+                    st.session_state.authenticated = True
+                    st.session_state.username = "Guest User"
+                    st.toast("Welcome Guest! Redirecting...", icon=":material/badge:")
+                    st.rerun()
                             
             # Signup Form rendering
             else:
